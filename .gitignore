@@ -1,0 +1,23 @@
+bin/
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+target/
+
+#Generated MDE artifacts
+/com.vanderhighway.trbac.model.tests/
+/com.vanderhighway.trbac.model.editor/
+/com.vanderhighway.trbac.model.edit/
