@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="Copyright (c) 2010-2015, Zoltan Ujhelyi, Gabor Szarnyas&#xA;This program and the accompanying materials are made available under the&#xA;terms of the Eclipse Public License v. 2.0 which is available at&#xA;http://www.eclipse.org/legal/epl-v20.html.&#xA;&#xA;SPDX-License-Identifier: EPL-2.0"
+    modelDirectory="/com.vanderhighway.trbac.model/src/main/java" modelPluginID="com.vanderhighway.trbac.model"
+    modelName="Petrinet" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0" copyrightFields="false"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>trbac.ecore</foreignModel>
+  <genPackages prefix="PetriNet" basePackage="com.vanderhighway.trbac.model" disposableProviderFactory="true"
+      interfacePackageSuffix="model" metaDataPackageSuffix="model" classPackageSuffix="model.impl"
+      utilityPackageSuffix="model.util" providerPackageSuffix="model.provider" presentationPackageSuffix="model.presentation"
+      testsPackageSuffix="model.tests" ecorePackage="trbac.ecore#/">
+    <genClasses ecoreClass="trbac.ecore#//Place">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Place/net"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference trbac.ecore#//Place/outArcs"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Place/inArcs"/>
+      <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Place/tokens"/>
+    </genClasses>
+    <genClasses ecoreClass="trbac.ecore#//Transition">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Transition/net"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Transition/inArcs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference trbac.ecore#//Transition/outArcs"/>
+    </genClasses>
+    <genClasses ecoreClass="trbac.ecore#//Arc">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trbac.ecore#//Arc/weight"/>
+    </genClasses>
+    <genClasses ecoreClass="trbac.ecore#//NamedElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trbac.ecore#//NamedElement/name"/>
+    </genClasses>
+    <genClasses ecoreClass="trbac.ecore#//PetriNet">
+      <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//PetriNet/places"/>
+      <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//PetriNet/transitions"/>
+    </genClasses>
+    <genClasses ecoreClass="trbac.ecore#//PTArc">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//PTArc/source"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//PTArc/target"/>
+    </genClasses>
+    <genClasses ecoreClass="trbac.ecore#//TPArc">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//TPArc/source"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//TPArc/target"/>
+    </genClasses>
+    <genClasses ecoreClass="trbac.ecore#//Token">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Token/place"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

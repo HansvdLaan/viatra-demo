@@ -25,7 +25,7 @@
 			</activation>
 			<modules>
 				<module>com.vanderhighway.trbac.model</module>
-				<module>com.vanderhighway.trbac.simulator</module>
+				<module>com.vanderhighway.trbac.verifier</module>
 			</modules>
 		</profile>
 	</profiles>
