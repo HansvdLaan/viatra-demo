@@ -42,5 +42,34 @@
     <genClasses ecoreClass="trbac.ecore#//Token">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Token/place"/>
     </genClasses>
+    <genClasses ecoreClass="trbac.ecore#//Policy">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference trbac.ecore#//Policy/users"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference trbac.ecore#//Policy/roles"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference trbac.ecore#//Policy/demarcations"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference trbac.ecore#//Policy/permissions"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference trbac.ecore#//Policy/sessions"/>
+    </genClasses>
+    <genClasses ecoreClass="trbac.ecore#//User">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//User/UR"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//User/US"/>
+    </genClasses>
+    <genClasses ecoreClass="trbac.ecore#//Role">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Role/RU"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Role/RD"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Role/juniors"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Role/seniors"/>
+    </genClasses>
+    <genClasses ecoreClass="trbac.ecore#//Demarcation">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Demarcation/DR"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Demarcation/DP"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Demarcation/subdemarcations"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Demarcation/superdemarcations"/>
+    </genClasses>
+    <genClasses ecoreClass="trbac.ecore#//Permission">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Permission/PD"/>
+    </genClasses>
+    <genClasses ecoreClass="trbac.ecore#//Session">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Session/SU"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

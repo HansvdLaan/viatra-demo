@@ -48,4 +48,50 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="place" lowerBound="1" eType="#//Place"
         eOpposite="#//Place/tokens"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Policy">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="users" upperBound="-1"
+        eType="#//User" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="roles" upperBound="-1"
+        eType="#//Role" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="demarcations" upperBound="-1"
+        eType="#//Demarcation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="permissions" upperBound="-1"
+        eType="#//Permission" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sessions" upperBound="-1"
+        eType="#//Session" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="User">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="UR" upperBound="-1" eType="#//Role"
+        eOpposite="#//Role/RU"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="US" upperBound="-1" eType="#//Session"
+        eOpposite="#//Session/SU"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Role">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="RU" upperBound="-1" eType="#//User"
+        eOpposite="#//User/UR"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="RD" upperBound="-1" eType="#//Demarcation"
+        eOpposite="#//Demarcation/DR"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="juniors" upperBound="-1"
+        eType="#//Role" eOpposite="#//Role/seniors"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="seniors" upperBound="-1"
+        eType="#//Role" eOpposite="#//Role/juniors"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Demarcation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="DR" upperBound="-1" eType="#//Role"
+        eOpposite="#//Role/RD"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="DP" upperBound="-1" eType="#//Permission"
+        eOpposite="#//Permission/PD"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subdemarcations" upperBound="-1"
+        eType="#//Demarcation" eOpposite="#//Demarcation/superdemarcations"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superdemarcations" upperBound="-1"
+        eType="#//Demarcation" eOpposite="#//Demarcation/subdemarcations"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Permission">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="PD" upperBound="-1" eType="#//Demarcation"
+        eOpposite="#//Demarcation/DP"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Session">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="SU" upperBound="-1" eType="#//User"
+        eOpposite="#//User/US"/>
+  </eClassifiers>
 </ecore:EPackage>
