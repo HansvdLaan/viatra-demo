@@ -8,7 +8,7 @@
  *******************************************************************************/
 package com.vanderhighway.trbac.verifier
 
-import "http://inf.mit.bme.hu/petrinet/2014"
+import "https://vanderhighway.com/trbac/2020"
 
 // 'Place' is a source place for transition 'Transition'.
 pattern sourcePlace(t : Transition, pl : Place) {
