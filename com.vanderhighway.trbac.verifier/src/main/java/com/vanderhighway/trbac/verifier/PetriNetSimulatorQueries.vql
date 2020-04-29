@@ -47,3 +47,4 @@ pattern notFireable(t : Transition) {
 pattern fireableTransition(t : Transition) {
 	neg find notFireable(t);
 }
+
