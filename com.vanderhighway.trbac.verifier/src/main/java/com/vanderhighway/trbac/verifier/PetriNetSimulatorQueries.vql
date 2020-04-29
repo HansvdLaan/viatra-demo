@@ -48,3 +48,124 @@ pattern fireableTransition(t : Transition) {
 	neg find notFireable(t);
 }
 
+// Policy
+pattern policy(policy: Policy) {
+    Policy(policy);
+}
+
+// Policy
+pattern session(session: Session) {
+    Session(session);
+}
+
+// Example Constraint - All Role Names
+pattern roleName(role: Role, name : java String) {
+    Role.name(role,name);
+}
+
+// ----- Example Cardinality Constraints -----
+
+pattern userShouldHaveARole(user: User) {
+    neg User.UR(user, _);
+}
+pattern roleShouldHaveADemarcation(role: Role) {
+    neg Role.RD(role, _);
+}
+pattern demarcationShouldHaveAPermission(dem: Demarcation) {
+    neg Demarcation.DP(dem, _);
+}
+
+pattern onlyOneDirector(role:Role) {
+	Role.name(role, "Director");
+	n == count Role.RU(role, _);
+	check(n >= 2);
+}
+
+pattern onlyOneRnDManager(role:Role) {
+	Role.name(role, "RnD_Manager");
+	n == count Role.RU(role, _);
+	check(n >= 2);
+}
+
+pattern onlyOneOperationsManager(role:Role) {
+	Role.name(role, "Operations_Manager");
+	n == count Role.RU(role, _);
+	check(n >= 2);
+}
+
+// ------------------------------------------
+
+
+// ----- Example Static SoD constraints -----
+
+pattern SoDEmployeeAndContractor(userE: User, userC: User, employee : Role, contractor : Role) {
+    Role.name(employee, "Employee");
+    Role.name(contractor, "Contractor");
+   	Role.RU(employee, userE);
+   	Role.RU(contractor, userC);
+    userE==userC;
+}
+
+pattern SoDEmployeeAndVisitor(userE: User, userV: User, employee : Role, visitor : Role) {
+    Role.name(employee, "Employee");
+    Role.name(visitor, "Visitor");
+   	Role.RU(employee, userE);
+   	Role.RU(visitor, userV);
+    userE==userV;
+}
+
+// ------------------------------------------
+
+
+// ----- Example Prerequiste Constraints -----
+
+pattern PrerequisiteEverybodyHasAccessToLobby(user: User) {
+	Permission.name(pLobby,"Lobby");
+    neg find accessRelation(user, pLobby);
+}
+
+pattern PrerequisiteVaultImpliesOpenOffice(user: User) {
+	Permission.name(pVault,"Vault");
+	find accessRelation(user, pVault);
+	Permission.name(pOpenOffice,"OpenOffice");
+    neg find accessRelation(user, pOpenOffice);
+}
+
+// ------------------------------------------
+
+
+// ----- Access Relation -----
+
+pattern accessRelation(user: User, permission: Permission) {
+    User.UR(user,role);
+    Role.RD(role, demarcation);
+   	Demarcation.DP(demarcation, permission);
+}
+
+// ------------------------------------------
+
+// ---- Constrains for Transformations ----
+pattern userShouldHaveASession(policy: Policy, user: User) {
+    neg User.US(user, _);
+    Policy(policy);
+}
+
+//pattern sessionShouldHaveAUser(policy: Policy, session: User) {
+//    neg User.US(user, _);
+//    Policy(policy);
+//}
+
+pattern SessionOfUser(user: User, session: Session) {
+    User.US(user, session);
+}
+
+pattern InheritedDemarcation(role: Role, demarcation: Demarcation) {
+    Role.RDH(role, demarcation);
+}
+
+pattern MissingInheritedDemarcation(roleJunior: Role, roleSenior: Role, demarcation: Demarcation) {
+	Role.juniors(roleSenior, roleJunior);
+	Role.RD(roleJunior,demarcation);
+	neg Role.RDH(roleSenior, demarcation);
+}
+// ----------------------------------------
