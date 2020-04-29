@@ -8,6 +8,7 @@
  *******************************************************************************/
 package com.vanderhighway.trbac.verifier;
 
+
 import java.io.IOException;
 
 import org.eclipse.emf.common.util.URI;
@@ -31,7 +32,7 @@ public class PetriNetSimulatorMain {
 		Resource.Factory.Registry.INSTANCE.getContentTypeToFactoryMap().put("*", new XMIResourceFactoryImpl());
 
 		ResourceSet set = new ResourceSetImpl();
-		URI uri = URI.createFileURI("My.petrinet");
+		URI uri = URI.createFileURI("My.trbac");
 		set.getResource(uri, true);
 
 		final AdvancedViatraQueryEngine engine = AdvancedViatraQueryEngine.createUnmanagedEngine(new EMFScope(set));
