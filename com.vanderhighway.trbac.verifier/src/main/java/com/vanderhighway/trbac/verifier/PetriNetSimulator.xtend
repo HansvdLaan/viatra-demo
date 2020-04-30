@@ -41,7 +41,6 @@ class PetriNetSimulator {
         transformation.ruleEngine.logger.level = Level::DEBUG
 	}
 	
-	
 	val removeTokenRule = createRule.precondition(sourcePlace).action [
 		pl.tokens.findFirst[true].remove
 	].build

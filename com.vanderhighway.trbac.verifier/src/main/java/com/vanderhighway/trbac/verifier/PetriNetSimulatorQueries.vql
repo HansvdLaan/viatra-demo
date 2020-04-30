@@ -149,10 +149,9 @@ pattern userShouldHaveASession(user: User) {
     neg User.US(user, _);
 }
 
-//pattern sessionShouldHaveAUser(policy: Policy, session: User) {
-//    neg User.US(user, _);
-//    Policy(policy);
-//}
+pattern sessionShouldHaveAUser(session: User) {
+    neg User.US(_,session);
+}
 
 pattern SessionOfUser(user: User, session: Session) {
     User.US(user, session);
@@ -163,8 +162,20 @@ pattern InheritedDemarcation(role: Role, demarcation: Demarcation) {
 }
 
 pattern MissingInheritedDemarcation(roleJunior: Role, roleSenior: Role, demarcation: Demarcation) {
+	find MissingDirectInheritedDemarcation(roleJunior, roleSenior, demarcation);
+	} or {
+	find MissingIndirectInheritedDemarcation(roleJunior, roleSenior, demarcation);
+}
+
+pattern MissingDirectInheritedDemarcation(roleJunior: Role, roleSenior: Role, demarcation: Demarcation) {
 	Role.juniors(roleSenior, roleJunior);
 	Role.RD(roleJunior,demarcation);
 	neg Role.RDH(roleSenior, demarcation);
+}
+
+pattern MissingIndirectInheritedDemarcation(roleJunior: Role, roleSenior: Role, demarcation: Demarcation) {
+	Role.juniors(roleSenior, roleJunior);
+	Role.RDH(roleJunior, demarcation);
+	neg Role.RDH(roleSenior,demarcation);
 }
 // ----------------------------------------
