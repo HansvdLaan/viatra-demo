@@ -145,9 +145,8 @@ pattern accessRelation(user: User, permission: Permission) {
 // ------------------------------------------
 
 // ---- Constrains for Transformations ----
-pattern userShouldHaveASession(policy: Policy, user: User) {
+pattern userShouldHaveASession(user: User) {
     neg User.US(user, _);
-    Policy(policy);
 }
 
 //pattern sessionShouldHaveAUser(policy: Policy, session: User) {
