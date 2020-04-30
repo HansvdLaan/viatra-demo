@@ -3,7 +3,7 @@ package com.vanderhighway.trbac.verifier;
 import com.google.common.base.Objects;
 import com.vanderhighway.trbac.model.trbac.model.Demarcation;
 import com.vanderhighway.trbac.model.trbac.model.Permission;
-import com.vanderhighway.trbac.model.trbac.model.PetriNetPackage;
+import com.vanderhighway.trbac.model.trbac.model.TRBACPackage;
 import com.vanderhighway.trbac.model.trbac.model.Role;
 import com.vanderhighway.trbac.model.trbac.model.User;
 
@@ -49,7 +49,7 @@ public class PolicyModifier {
 	private BatchTransformation transformation;
 
 	@Extension
-	private PetriNetPackage ePackage = PetriNetPackage.eINSTANCE;
+	private TRBACPackage ePackage = TRBACPackage.eINSTANCE;
 
 	private AdvancedViatraQueryEngine engine;
 

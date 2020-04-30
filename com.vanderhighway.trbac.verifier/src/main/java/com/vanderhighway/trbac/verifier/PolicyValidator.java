@@ -1,7 +1,7 @@
 package com.vanderhighway.trbac.verifier;
 
 import com.google.common.base.Objects;
-import com.vanderhighway.trbac.model.trbac.model.PetriNetPackage;
+import com.vanderhighway.trbac.model.trbac.model.TRBACPackage;
 import com.vanderhighway.trbac.model.trbac.model.Role;
 
 import java.util.List;
@@ -57,7 +57,7 @@ public class PolicyValidator {
     private BatchTransformationStatements statements;
 
     @Extension
-    private PetriNetPackage ePackage = PetriNetPackage.eINSTANCE;
+    private TRBACPackage ePackage = TRBACPackage.eINSTANCE;
 
     protected AdvancedViatraQueryEngine engine;
 

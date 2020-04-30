@@ -10,44 +10,6 @@ package com.vanderhighway.trbac.verifier
 
 import "https://vanderhighway.com/trbac/2020"
 
-// 'Place' is a source place for transition 'Transition'.
-pattern sourcePlace(t : Transition, pl : Place) {
-	PetriNet.transitions(net, t);
-	PetriNet.places(net, pl);
-	Place.outArcs(pl, arc);
-	PTArc.target(arc, t);
-}
-
-// 'Place' is a target place for transition 'Transition'. 
-pattern targetPlace(t : Transition, pl : Place) {
-	PetriNet.transitions(n, t);
-	PetriNet.places(n, pl);
-	Transition.outArcs(t, arc);
-	TPArc.target(arc, pl);
-}
-
-// 'Place' contains a token 'Token' linked to it
-pattern placeWithToken(pl : Place, to : Token) {
-	Place.tokens(pl, to);
-}
-
-pattern placeWithToken2(pl : Place) {
-	find placeWithToken(pl, _);
-}
-
-pattern notFireable(t : Transition) {
-	find sourcePlace(t, Place);
-	neg find placeWithToken2(Place);
-	//} or {
-	//	find sourcePlaceInhibitor(t,Place);
-	//	find placeWithToken2(Place);
-}
-
-// 'Transition' is fireable
-pattern fireableTransition(t : Transition) {
-	neg find notFireable(t);
-}
-
 // Policy
 pattern policy(policy: Policy) {
     Policy(policy);

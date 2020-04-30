@@ -22,7 +22,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.viatra.query.runtime.api.AdvancedViatraQueryEngine;
 import org.eclipse.viatra.query.runtime.emf.EMFScope;
-import com.vanderhighway.trbac.model.trbac.model.PetriNetPackage;
+import com.vanderhighway.trbac.model.trbac.model.TRBACPackage;
 import com.vanderhighway.trbac.verifier.PolicyValidator;
 
 public class PolicyValidatorMain {
@@ -35,7 +35,7 @@ public class PolicyValidatorMain {
 		System.out.print("Initialize model scope and preparing engine... ");
 		
 		// Initializing the EMF package
-		PetriNetPackage.eINSTANCE.getName();
+		TRBACPackage.eINSTANCE.getName();
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("petrinet", new XMIResourceFactoryImpl());
 		Resource.Factory.Registry.INSTANCE.getContentTypeToFactoryMap().put("*", new XMIResourceFactoryImpl());
 

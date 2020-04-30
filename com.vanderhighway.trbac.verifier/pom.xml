@@ -45,7 +45,7 @@
 					<outputDirectory>src/main/generated-sources/patterns</outputDirectory>
 					<metamodels>
 						<metamodel>
-							<packageClass>com.vanderhighway.trbac.model.trbac.model.PetriNetPackage</packageClass>
+							<packageClass>com.vanderhighway.trbac.model.trbac.model.TRBACPackage</packageClass>
 						</metamodel>
 					</metamodels>
 				</configuration>
@@ -104,7 +104,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>com.vanderhighway.trbac.verifier.PetriNetSimulatorMain</mainClass>
+							<mainClass>com.vanderhighway.trbac.verifier.PolicyValidatorMain</mainClass>
 							<useUniqueVersions>false</useUniqueVersions>
 						</manifest>
 					</archive>
