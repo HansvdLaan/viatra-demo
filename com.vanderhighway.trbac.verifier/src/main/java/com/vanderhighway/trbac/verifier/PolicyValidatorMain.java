@@ -31,7 +31,6 @@ public class PolicyValidatorMain {
 		//Debug output
 		//BasicConfigurator.configure();
 
-		
 		System.out.println("Validator Called!");
 		System.out.print("Initialize model scope and preparing engine... ");
 		
@@ -48,10 +47,16 @@ public class PolicyValidatorMain {
 		final AdvancedViatraQueryEngine engine = AdvancedViatraQueryEngine.createUnmanagedEngine(new EMFScope(set));
 
 		PolicyValidator validator = new PolicyValidator(engine);
-		
+		PolicyModifier modifier = new PolicyModifier(engine);
+
+		validator.initialize();
 		validator.execute();
-		
+		validator.dispose();
+
+		modifier.execute(modifier.addRole("R4"));
+		modifier.execute(modifier.addRoleInheritance("R1", "R4"));
+		modifier.dispose();
+
 		System.out.println("Done!");
-		//simulator.fire(10);
 	}
 }
