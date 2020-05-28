@@ -13,6 +13,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
+import org.eclipse.collections.impl.lazy.parallel.Batch;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.*;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -59,6 +60,90 @@ public class PolicyModifier {
 		this.transformation = BatchTransformation.forEngine(this.engine).build();
 	}
 
+
+	// ---------- Add / Remove Authorization Model Entities ----------
+
+	public BatchTransformationRule addUser(String name) {
+		return createNamedEntity(ePackage.getUser(), ePackage.getPolicy_Users(), ePackage.getUser_Name(), name);
+	}
+
+	public BatchTransformationRule removeUser(String name) {
+		return removeNamedEntity(ePackage.getUser(), ePackage.getPolicy_Users(), ePackage.getUser_Name(), name);
+	}
+	
+	public BatchTransformationRule addRole(String name) {
+		return createNamedEntity(ePackage.getRole(), ePackage.getPolicy_Roles(), ePackage.getRole_Name(), name);
+	}
+
+	public BatchTransformationRule removeRole(String name) {
+		return removeNamedEntity(ePackage.getRole(), ePackage.getPolicy_Roles(), ePackage.getRole_Name(), name);
+	}
+
+	public BatchTransformationRule addDemarcation(String name) {
+		return createNamedEntity(ePackage.getDemarcation(), ePackage.getPolicy_Demarcations(), ePackage.getDemarcation_Name(), name);
+	}
+
+	public BatchTransformationRule removeDemarcation(String name) {
+		return removeNamedEntity(ePackage.getDemarcation(), ePackage.getPolicy_Demarcations(), ePackage.getDemarcation_Name(), name);
+	}
+
+	public BatchTransformationRule addPermission(String name) {
+		return createNamedEntity(ePackage.getPermission(), ePackage.getPolicy_Permissions(), ePackage.getPermission_Name(), name);
+	}
+
+	public BatchTransformationRule removePermission(String name) {
+		return removeNamedEntity(ePackage.getPermission(), ePackage.getPolicy_Permissions(), ePackage.getPermission_Name(), name);
+	}
+
+	// -----------------------------------------------
+
+
+	// ---------- Add / Remove Authorization Model Relations ----------
+
+	public BatchTransformationRule assignRoleToUser(String user, String role) {
+		return addToRelation(ePackage.getUser(), user, ePackage.getRole(), role, ePackage.getUser_UR());
+	}
+
+	public BatchTransformationRule deassignRoleFromUser(String user, String role) {
+		return removeFromRelation(ePackage.getUser(), user, ePackage.getRole(), role, ePackage.getUser_UR());
+	}
+
+	public BatchTransformationRule assignDemarcationToRole(String role, String demarcation) {
+		return addToRelation(ePackage.getRole(), role, ePackage.getDemarcation(), demarcation, ePackage.getRole_RD());
+	}
+
+	public BatchTransformationRule deassignDemarcationFromRole(String role, String demarcation) {
+		return addToRelation(ePackage.getRole(), role, ePackage.getDemarcation(), demarcation, ePackage.getRole_RD());
+	}
+
+	public BatchTransformationRule assignPermissionToDemarcation(String demarcation, String permission) {
+		return addToRelation(ePackage.getDemarcation(), demarcation, ePackage.getPermission(), permission, ePackage.getDemarcation_DP());
+	}
+
+	public BatchTransformationRule deassignPermissionFromDemarcation(String demarcation, String permission) {
+		return addToRelation(ePackage.getDemarcation(), demarcation, ePackage.getPermission(), permission, ePackage.getDemarcation_DP());
+	}
+
+	public BatchTransformationRule addRoleInheritance(String juniorRole, String seniorRole) {
+		return addToRelation(ePackage.getRole(), seniorRole, ePackage.getRole(), juniorRole, ePackage.getRole_Juniors());
+	}
+
+	public BatchTransformationRule removeRoleInheritance(String juniorRole, String seniorRole) {
+			return removeFromRelation(ePackage.getRole(), seniorRole, ePackage.getRole(), juniorRole, ePackage.getRole_Juniors());
+	}
+
+	public BatchTransformationRule addDemarcationInheritance(String subdemarcation, String supdemarcation) {
+		return addToRelation(ePackage.getDemarcation(), subdemarcation, ePackage.getDemarcation(), supdemarcation, ePackage.getDemarcation_Subdemarcations());
+	}
+
+	public BatchTransformationRule removeDemarcationInheritance(String subdemarcation, String supdemarcation) {
+		return removeFromRelation(ePackage.getDemarcation(), subdemarcation, ePackage.getDemarcation(), supdemarcation, ePackage.getDemarcation_Subdemarcations());
+	}
+
+	// -------------------------------------------
+
+
+
 	public static List findAllByName(com.vanderhighway.trbac.model.trbac.model.Policy policy, EClass clazz, String name) {
 		switch (clazz.getName()) {
 			case "Session":
@@ -74,22 +159,6 @@ public class PolicyModifier {
 			default:
 				return new LinkedList();
 		}
-	}
-
-	public BatchTransformationRule addRole(String name) {
-		return createNamedEntity(ePackage.getRole(), ePackage.getPolicy_Roles(), ePackage.getRole_Name(), name);
-	}
-
-	public BatchTransformationRule removeRole(String name) {
-		return removeNamedEntity(ePackage.getRole(), ePackage.getPolicy_Roles(), ePackage.getRole_Name(), name);
-	}
-
-	public BatchTransformationRule addRoleInheritance(String juniorRole, String seniorRole) {
-		return addToRelation(ePackage.getRole(), seniorRole, ePackage.getRole(), juniorRole, ePackage.getRole_Juniors());
-	}
-
-	public BatchTransformationRule removeRoleInheritance(String juniorRole, String seniorRole) {
-			return removeFromRelation(ePackage.getRole(), seniorRole, ePackage.getRole(), juniorRole, ePackage.getRole_Juniors());
 	}
 
 	public BatchTransformationRule createNamedEntity(EClass clazz, EReference containmentReference,

@@ -25,6 +25,55 @@ pattern roleName(role: Role, name : java String) {
     Role.name(role,name);
 }
 
+// ----- Utility Patterns -----
+
+pattern allJuniors(senior: Role, junior: Role) {
+	Role.juniors(senior, junior);
+} or {
+	Role.juniors(senior, refjunior);
+	find allJuniors(refjunior, junior);
+}
+
+pattern allJuniorsIncludingSelf(senior: Role, roleP: Role) {
+	senior == roleP;
+} or {
+	find allJuniors(senior, roleP);
+}
+
+pattern allSubdemarcations(supdemarcation: Demarcation, subdemarcation: Demarcation) {
+	Demarcation.subdemarcations(supdemarcation, subdemarcation);
+} or {
+	Demarcation.subdemarcations(supdemarcation, refsubdemarcation);
+	find allSubdemarcations(refsubdemarcation, subdemarcation);
+}
+
+pattern allSubDemarcationsIncludingSelf(supdemarcation: Demarcation, demarcationP: Demarcation) {
+	supdemarcation == demarcationP;
+} or {
+	find allSubdemarcations(supdemarcation, demarcationP);
+}
+
+// ----------------------------
+
+
+// ----- Access Relation -----
+
+pattern accessRelation(user: User, permission: Permission) {
+    User.UR(user,role);
+    Role.RD(role, demarcation);
+   	Demarcation.DP(demarcation, permission);
+}
+
+pattern accessRelation2(user: User, permission: Permission) {
+    User.UR(user,role);
+    find allJuniorsIncludingSelf(role, roleP);
+    Role.RD(roleP, demarcation);
+    find allSubDemarcationsIncludingSelf(demarcation, demarcationP);
+   	Demarcation.DP(demarcationP, permission);
+}
+
+// ---------------------------
+
 // ----- Example Cardinality Constraints -----
 
 pattern userShouldHaveARole(user: User) {
@@ -96,16 +145,6 @@ pattern PrerequisiteVaultImpliesOpenOffice(user: User) {
 // ------------------------------------------
 
 
-// ----- Access Relation -----
-
-pattern accessRelation(user: User, permission: Permission) {
-    User.UR(user,role);
-    Role.RD(role, demarcation);
-   	Demarcation.DP(demarcation, permission);
-}
-
-// ------------------------------------------
-
 // ---- Constrains for Transformations ----
 pattern userShouldHaveASession(user: User) {
     neg User.US(user, _);
@@ -119,25 +158,26 @@ pattern SessionOfUser(user: User, session: Session) {
     User.US(user, session);
 }
 
-pattern InheritedDemarcation(role: Role, demarcation: Demarcation) {
-    Role.RDH(role, demarcation);
-}
-
-pattern MissingInheritedDemarcation(roleJunior: Role, roleSenior: Role, demarcation: Demarcation) {
-	find MissingDirectInheritedDemarcation(roleJunior, roleSenior, demarcation);
-	} or {
-	find MissingIndirectInheritedDemarcation(roleJunior, roleSenior, demarcation);
-}
-
-pattern MissingDirectInheritedDemarcation(roleJunior: Role, roleSenior: Role, demarcation: Demarcation) {
-	Role.juniors(roleSenior, roleJunior);
-	Role.RD(roleJunior,demarcation);
-	neg Role.RDH(roleSenior, demarcation);
-}
-
-pattern MissingIndirectInheritedDemarcation(roleJunior: Role, roleSenior: Role, demarcation: Demarcation) {
-	Role.juniors(roleSenior, roleJunior);
-	Role.RDH(roleJunior, demarcation);
-	neg Role.RDH(roleSenior,demarcation);
-}
+//
+//pattern InheritedDemarcation(role: Role, demarcation: Demarcation) {
+//    Role.RDH(role, demarcation);
+//}
+//
+//pattern MissingInheritedDemarcation(roleJunior: Role, roleSenior: Role, demarcation: Demarcation) {
+//	find MissingDirectInheritedDemarcation(roleJunior, roleSenior, demarcation);
+//	} or {
+//	find MissingIndirectInheritedDemarcation(roleJunior, roleSenior, demarcation);
+//}
+//
+//pattern MissingDirectInheritedDemarcation(roleJunior: Role, roleSenior: Role, demarcation: Demarcation) {
+//	Role.juniors(roleSenior, roleJunior);
+//	Role.RD(roleJunior,demarcation);
+//	neg Role.RDH(roleSenior, demarcation);
+//}
+//
+//pattern MissingIndirectInheritedDemarcation(roleJunior: Role, roleSenior: Role, demarcation: Demarcation) {
+//	Role.juniors(roleSenior, roleJunior);
+//	Role.RDH(roleJunior, demarcation);
+//	neg Role.RDH(roleSenior,demarcation);
+//}
 // ----------------------------------------

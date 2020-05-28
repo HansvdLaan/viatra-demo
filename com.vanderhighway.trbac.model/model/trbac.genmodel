@@ -27,7 +27,6 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Role/RD"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Role/juniors"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Role/seniors"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Role/RDH"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trbac.ecore#//Role/name"/>
     </genClasses>
     <genClasses ecoreClass="trbac.ecore#//Demarcation">
@@ -35,13 +34,10 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Demarcation/DP"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Demarcation/subdemarcations"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Demarcation/superdemarcations"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Demarcation/DRH"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Demarcation/DPH"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trbac.ecore#//Demarcation/name"/>
     </genClasses>
     <genClasses ecoreClass="trbac.ecore#//Permission">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Permission/PD"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Permission/PDH"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trbac.ecore#//Permission/name"/>
     </genClasses>
     <genClasses ecoreClass="trbac.ecore#//Session">

@@ -8,11 +8,6 @@
  *******************************************************************************/
 package com.vanderhighway.trbac.verifier;
 
-import picocli.CommandLine;
-import picocli.CommandLine.Command;
-import picocli.CommandLine.Option;
-import picocli.CommandLine.Parameters;
-
 import java.io.IOException;
 
 import org.eclipse.emf.common.util.URI;
@@ -23,7 +18,6 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.viatra.query.runtime.api.AdvancedViatraQueryEngine;
 import org.eclipse.viatra.query.runtime.emf.EMFScope;
 import com.vanderhighway.trbac.model.trbac.model.TRBACPackage;
-import com.vanderhighway.trbac.verifier.PolicyValidator;
 
 public class PolicyValidatorMain {
 	public static void main(String[] args) throws IOException {
@@ -36,12 +30,12 @@ public class PolicyValidatorMain {
 		
 		// Initializing the EMF package
 		TRBACPackage.eINSTANCE.getName();
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("petrinet", new XMIResourceFactoryImpl());
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("trbac", new XMIResourceFactoryImpl());
 		Resource.Factory.Registry.INSTANCE.getContentTypeToFactoryMap().put("*", new XMIResourceFactoryImpl());
 
 		ResourceSet set = new ResourceSetImpl();
-		URI uri = URI.createFileURI("models/basic/role_inheritance.trbac");
-		//URI uri = URI.createFileURI("com.vanderhighway.trbac.verifier/models/basic/role_inheritance.trbac");
+		//URI uri = URI.createFileURI("models/basic/role_inheritance.trbac");
+		URI uri = URI.createFileURI("com.vanderhighway.trbac.verifier/models/basic/role_inheritance.trbac");
 		set.getResource(uri, true);
 
 		final AdvancedViatraQueryEngine engine = AdvancedViatraQueryEngine.createUnmanagedEngine(new EMFScope(set));
@@ -51,10 +45,13 @@ public class PolicyValidatorMain {
 
 		validator.initialize();
 		validator.execute();
-		validator.dispose();
+		//validator.dispose();
 
 		modifier.execute(modifier.addRole("R4"));
-		modifier.execute(modifier.addRoleInheritance("R1", "R4"));
+		modifier.execute(modifier.addRoleInheritance("R3", "R4"));
+		modifier.execute(modifier.assignRoleToUser("U4", "R4"));
+		
+		
 		modifier.dispose();
 
 		System.out.println("Done!");

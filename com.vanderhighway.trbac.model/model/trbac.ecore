@@ -30,8 +30,6 @@
         eType="#//Role" eOpposite="#//Role/seniors"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="seniors" upperBound="-1"
         eType="#//Role" eOpposite="#//Role/juniors"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="RDH" upperBound="-1" eType="#//Demarcation"
-        eOpposite="#//Demarcation/DRH"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Demarcation">
@@ -43,17 +41,11 @@
         eType="#//Demarcation" eOpposite="#//Demarcation/superdemarcations"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="superdemarcations" upperBound="-1"
         eType="#//Demarcation" eOpposite="#//Demarcation/subdemarcations"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="DRH" upperBound="-1" eType="#//Role"
-        eOpposite="#//Role/RDH"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="DPH" upperBound="-1" eType="#//Permission"
-        eOpposite="#//Permission/PDH"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Permission">
     <eStructuralFeatures xsi:type="ecore:EReference" name="PD" upperBound="-1" eType="#//Demarcation"
         eOpposite="#//Demarcation/DP"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="PDH" upperBound="-1" eType="#//Demarcation"
-        eOpposite="#//Demarcation/DPH"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Session">

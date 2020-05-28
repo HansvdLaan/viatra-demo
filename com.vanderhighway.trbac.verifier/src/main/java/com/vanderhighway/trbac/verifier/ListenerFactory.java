@@ -204,34 +204,64 @@ public class ListenerFactory {
 			}
 		};
 	}
-
-	public static IMatchUpdateListener<MissingInheritedDemarcation.Match> getMissingInheritedDemarcationUpdateListener() {
-		return new IMatchUpdateListener<MissingInheritedDemarcation.Match>() {
+	
+	public static IMatchUpdateListener<AccessRelation2.Match> getAccessRelation2UpdateListener() {
+		return new IMatchUpdateListener<AccessRelation2.Match>() {
 			@Override
-			public void notifyAppearance(MissingInheritedDemarcation.Match match) {
-				System.out.printf("[ADD MissingInheritedDemarcation Match] %s %n", match.prettyPrint());
+			public void notifyAppearance(AccessRelation2.Match match) {
+				System.out.printf("[ADD AccessRelation2 Match] %s %n", match.prettyPrint());
 			}
 
 			@Override
-			public void notifyDisappearance(MissingInheritedDemarcation.Match match) {
-				System.out.printf("[REM MissingInheritedDemarcation Match] %s %n", match.prettyPrint());
+			public void notifyDisappearance(AccessRelation2.Match match) {
+				System.out.printf("[REM AccessRelation2 Match] %s %n", match.prettyPrint());
 
 			}
 		};
 	}
 	
-	public static IMatchUpdateListener<InheritedDemarcation.Match> getInheritedDemarcationUpdateListener() {
-		return new IMatchUpdateListener<InheritedDemarcation.Match>() {
+	public static IMatchUpdateListener<AllJuniors.Match> getAllJuniorsUpdateListener() {
+		return new IMatchUpdateListener<AllJuniors.Match>() {
 			@Override
-			public void notifyAppearance(InheritedDemarcation.Match match) {
-				System.out.printf("[ADD InheritedDemarcation Match] %s %n", match.prettyPrint());
+			public void notifyAppearance(AllJuniors.Match match) {
+				System.out.printf("[ADD AllJuniors Match] %s %n", match.prettyPrint());
 			}
 
 			@Override
-			public void notifyDisappearance(InheritedDemarcation.Match match) {
-				System.out.printf("[REM InheritedDemarcation Match] %s %n", match.prettyPrint());
+			public void notifyDisappearance(AllJuniors.Match match) {
+				System.out.printf("[REM AllJuniors Match] %s %n", match.prettyPrint());
 
 			}
 		};
 	}
+//
+//	public static IMatchUpdateListener<MissingInheritedDemarcation.Match> getMissingInheritedDemarcationUpdateListener() {
+//		return new IMatchUpdateListener<MissingInheritedDemarcation.Match>() {
+//			@Override
+//			public void notifyAppearance(MissingInheritedDemarcation.Match match) {
+//				System.out.printf("[ADD MissingInheritedDemarcation Match] %s %n", match.prettyPrint());
+//			}
+//
+//			@Override
+//			public void notifyDisappearance(MissingInheritedDemarcation.Match match) {
+//				System.out.printf("[REM MissingInheritedDemarcation Match] %s %n", match.prettyPrint());
+//
+//			}
+//		};
+//	}
+//	
+//	public static IMatchUpdateListener<InheritedDemarcation.Match> getInheritedDemarcationUpdateListener() {
+//		return new IMatchUpdateListener<InheritedDemarcation.Match>() {
+//			@Override
+//			public void notifyAppearance(InheritedDemarcation.Match match) {
+//				System.out.printf("[ADD InheritedDemarcation Match] %s %n", match.prettyPrint());
+//			}
+//
+//			@Override
+//			public void notifyDisappearance(InheritedDemarcation.Match match) {
+//				System.out.printf("[REM InheritedDemarcation Match] %s %n", match.prettyPrint());
+//
+//			}
+//		};
+//	}
 }

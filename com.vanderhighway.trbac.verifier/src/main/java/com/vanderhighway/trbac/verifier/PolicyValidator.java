@@ -102,17 +102,21 @@ public class PolicyValidator {
         // Add Role Name Listener
         engine.addMatchUpdateListener(RoleName.Matcher.on(engine), ListenerFactory.getRoleNameMatchUpdateListener(), true);
 
-        engine.addMatchUpdateListener(MissingInheritedDemarcation.Matcher.on(engine), ListenerFactory.getMissingInheritedDemarcationUpdateListener(), true);
-        engine.addMatchUpdateListener(InheritedDemarcation.Matcher.on(engine), ListenerFactory.getInheritedDemarcationUpdateListener(), true);
+        //engine.addMatchUpdateListener(MissingInheritedDemarcation.Matcher.on(engine), ListenerFactory.getMissingInheritedDemarcationUpdateListener(), true);
+        //engine.addMatchUpdateListener(InheritedDemarcation.Matcher.on(engine), ListenerFactory.getInheritedDemarcationUpdateListener(), true);
 
         // Add Access Relation Listener
+        engine.addMatchUpdateListener(AllJuniors.Matcher.on(engine), ListenerFactory.getAllJuniorsUpdateListener(), true);
         //engine.addMatchUpdateListener(AccessRelation.Matcher.on(engine), ListenerFactory.getAccessRelationUpdateListener(), true);
+        engine.addMatchUpdateListener(AccessRelation2.Matcher.on(engine), ListenerFactory.getAccessRelation2UpdateListener(), true);
     }
 
     private EventDrivenTransformation createTransformation() {
         EventDrivenTransformation transformation = null;
         this.manipulation = new SimpleModelManipulations(this.engine);
-        transformation = EventDrivenTransformation.forEngine(this.engine).addRule(this.addInheritedDemarcations()).build();
+        transformation = EventDrivenTransformation.forEngine(this.engine)
+        		//.addRule(this.addInheritedDemarcations())
+        		.build();
         return transformation;
     }
 
@@ -122,19 +126,19 @@ public class PolicyValidator {
         return transformation;
     }
 
-    private EventDrivenTransformationRule<MissingInheritedDemarcation.Match, MissingInheritedDemarcation.Matcher> addInheritedDemarcations() {
-        final Consumer<MissingInheritedDemarcation.Match> function = (MissingInheritedDemarcation.Match it) -> {
-            it.getRoleSenior().getRDH().add(it.getDemarcation());
-        };
-        final EventDrivenTransformationRule<MissingInheritedDemarcation.Match, MissingInheritedDemarcation.Matcher> exampleRule =
-                this._eventDrivenTransformationRuleFactory.createRule(MissingInheritedDemarcation.instance()).action(
-                        CRUDActivationStateEnum.CREATED, function).action(
-                        CRUDActivationStateEnum.UPDATED, (MissingInheritedDemarcation.Match it) -> {
-                        }).action(
-                        CRUDActivationStateEnum.DELETED, (MissingInheritedDemarcation.Match it) -> {
-                        }).addLifeCycle(Lifecycles.getDefault(true, true)).build();
-        return exampleRule;
-    }
+//    private EventDrivenTransformationRule<MissingInheritedDemarcation.Match, MissingInheritedDemarcation.Matcher> addInheritedDemarcations() {
+//        final Consumer<MissingInheritedDemarcation.Match> function = (MissingInheritedDemarcation.Match it) -> {
+//            it.getRoleSenior().getRDH().add(it.getDemarcation());
+//        };
+//        final EventDrivenTransformationRule<MissingInheritedDemarcation.Match, MissingInheritedDemarcation.Matcher> exampleRule =
+//                this._eventDrivenTransformationRuleFactory.createRule(MissingInheritedDemarcation.instance()).action(
+//                        CRUDActivationStateEnum.CREATED, function).action(
+//                        CRUDActivationStateEnum.UPDATED, (MissingInheritedDemarcation.Match it) -> {
+//                        }).action(
+//                        CRUDActivationStateEnum.DELETED, (MissingInheritedDemarcation.Match it) -> {
+//                        }).addLifeCycle(Lifecycles.getDefault(true, true)).build();
+//        return exampleRule;
+//    }
 
     public void dispose() {
         if (!Objects.equal(this.transformation, null)) {
