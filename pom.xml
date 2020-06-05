@@ -37,7 +37,7 @@
 		</repository>
 		<repository>
 			<id>repo.eclipse.org.viatra</id>
-			<url>https://repo.eclipse.org/content/repositories/viatra-releases/</url>
+			<url>https://repo.eclipse.org/content/repositories/viatra-snapshots/</url>
 		</repository>
 	</repositories>
 	
@@ -48,7 +48,7 @@
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
-			<url>https://repo.eclipse.org/content/repositories/viatra-releases/</url>
+			<url>https://repo.eclipse.org/content/repositories/viatra-snapshots/</url>
 		</pluginRepository>
 	</pluginRepositories>
 

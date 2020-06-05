@@ -16,6 +16,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference trbac.ecore#//Policy/permissions"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference trbac.ecore#//Policy/sessions"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trbac.ecore#//Policy/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference trbac.ecore#//Policy/schedule"/>
     </genClasses>
     <genClasses ecoreClass="trbac.ecore#//User">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//User/UR"/>
@@ -43,6 +44,35 @@
     <genClasses ecoreClass="trbac.ecore#//Session">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Session/SU"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trbac.ecore#//Session/name"/>
+    </genClasses>
+    <genClasses ecoreClass="trbac.ecore#//Range">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trbac.ecore#//Range/starttime"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trbac.ecore#//Range/endtime"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Range/dayschedule"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//Range/schedulerange"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trbac.ecore#//Range/name"/>
+    </genClasses>
+    <genClasses ecoreClass="trbac.ecore#//DaySchedule">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trbac.ecore#//DaySchedule/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//DaySchedule/ranges"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference trbac.ecore#//DaySchedule/scheduleranges"/>
+    </genClasses>
+    <genClasses ecoreClass="trbac.ecore#//Schedule">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trbac.ecore#//Schedule/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference trbac.ecore#//Schedule/dayschedules"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference trbac.ecore#//Schedule/rangegroups"/>
+    </genClasses>
+    <genClasses ecoreClass="trbac.ecore#//WeekdaySchedule"/>
+    <genClasses ecoreClass="trbac.ecore#//YeardaySchedule"/>
+    <genClasses ecoreClass="trbac.ecore#//RangeGroup">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference trbac.ecore#//RangeGroup/ranges"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trbac.ecore#//RangeGroup/name"/>
+    </genClasses>
+    <genClasses ecoreClass="trbac.ecore#//ScheduleRange">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trbac.ecore#//ScheduleRange/starttime"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trbac.ecore#//ScheduleRange/endtime"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference trbac.ecore#//ScheduleRange/range"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute trbac.ecore#//ScheduleRange/name"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

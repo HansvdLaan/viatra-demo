@@ -104,7 +104,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>com.vanderhighway.trbac.verifier.PolicyValidatorMain</mainClass>
+							<mainClass>com.vanderhighway.trbac.verifier.PolicyValidatorCLI</mainClass>
 							<useUniqueVersions>false</useUniqueVersions>
 						</manifest>
 					</archive>
@@ -195,7 +195,19 @@
   			<groupId>info.picocli</groupId>
   			<artifactId>picocli</artifactId>
   		<version>4.2.0</version>
-</dependency>
+		</dependency>
+
+		<dependency>
+			<groupId>org.beryx</groupId>
+			<artifactId>text-io</artifactId>
+			<version>3.4.1</version>
+		</dependency>
+		
+		<dependency>
+            <groupId>com.breinify</groupId>
+            <artifactId>brein-time-utilities</artifactId>
+            <version>1.7.0</version>
+        </dependency>
 
 	</dependencies>
 </project>
