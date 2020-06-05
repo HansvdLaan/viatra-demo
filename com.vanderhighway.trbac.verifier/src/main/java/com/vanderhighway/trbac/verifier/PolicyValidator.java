@@ -1,15 +1,22 @@
 package com.vanderhighway.trbac.verifier;
 
+import com.brein.time.timeintervals.collections.ListIntervalCollection;
+import com.brein.time.timeintervals.indexes.IntervalTree;
+import com.brein.time.timeintervals.indexes.IntervalTreeBuilder;
+import com.brein.time.timeintervals.intervals.IInterval;
+import com.brein.time.timeintervals.intervals.IdInterval;
+import com.brein.time.timeintervals.intervals.IntegerInterval;
 import com.google.common.base.Objects;
 import com.vanderhighway.trbac.model.trbac.model.TRBACPackage;
-import com.vanderhighway.trbac.model.trbac.model.Role;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
-import org.eclipse.emf.common.util.EList;
+import org.beryx.textio.TextTerminal;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.viatra.query.runtime.api.AdvancedViatraQueryEngine;
 import org.eclipse.viatra.transformation.evm.specific.Lifecycles;
@@ -24,64 +31,26 @@ import org.eclipse.viatra.transformation.runtime.emf.rules.eventdriven.EventDriv
 import org.eclipse.viatra.transformation.runtime.emf.transformation.batch.BatchTransformation;
 import org.eclipse.viatra.transformation.runtime.emf.transformation.batch.BatchTransformationStatements;
 import org.eclipse.viatra.transformation.runtime.emf.transformation.eventdriven.EventDrivenTransformation;
-import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.Extension;
 
 @SuppressWarnings("all")
 public class PolicyValidator {
+
+
     @Extension
     private Logger logger = Logger.getLogger(PolicyValidator.class);
 
-    /**
-     * Transformation-related extensions
-     */
-    @Extension
-    private EventDrivenTransformation transformation;
-
-    /**
-     * Transformation rule-related extensions
-     */
-    @Extension
-    private EventDrivenTransformationRuleFactory _eventDrivenTransformationRuleFactory = new EventDrivenTransformationRuleFactory();
-
-    @Extension
-    private IModelManipulations manipulation;
-
-    @Extension
-    private BatchTransformationRuleFactory batchFactory = new BatchTransformationRuleFactory();
-
-    @Extension
-    private BatchTransformation transformation2;
-
-    @Extension
-    private BatchTransformationStatements statements;
-
-    @Extension
-    private TRBACPackage ePackage = TRBACPackage.eINSTANCE;
-
     protected AdvancedViatraQueryEngine engine;
 
-    protected Resource resource;
+    private IntervalTree tree;
+    Map<IntegerInterval, EObject> intervalmap;
 
     public PolicyValidator(final AdvancedViatraQueryEngine engine) {
         this.engine = engine;
-        this.addChangeListeners(engine);
-    }
-
-    public void initialize() {
-        this.transformation = createTransformation();
-        this.logger.info("Preparing transformation rules.");
-        this.createTransformation();
-        this.logger.info("Prepared transformation rules");
-    }
-
-    public void execute() {
-        this.logger.debug("Executing transformations");
-        this.transformation.getExecutionSchema().startUnscheduledExecution();
     }
 
     //TODO: move this to somewhere else!
-    private void addChangeListeners(AdvancedViatraQueryEngine engine) {
+    public void addChangeListeners(AdvancedViatraQueryEngine engine) {
         // fireNow = true parameter means all current matches are sent to the listener
 
         // Add some other Listeners
@@ -109,42 +78,11 @@ public class PolicyValidator {
         engine.addMatchUpdateListener(AllJuniors.Matcher.on(engine), ListenerFactory.getAllJuniorsUpdateListener(), true);
         //engine.addMatchUpdateListener(AccessRelation.Matcher.on(engine), ListenerFactory.getAccessRelationUpdateListener(), true);
         engine.addMatchUpdateListener(AccessRelation2.Matcher.on(engine), ListenerFactory.getAccessRelation2UpdateListener(), true);
+//        engine.addMatchUpdateListener(DayRange.Matcher.on(engine), ListenerFactory.getDayRangeUpdateListener(), true);
+//        engine.addMatchUpdateListener(NonOverlappingDayRange.Matcher.on(engine), ListenerFactory.getNonOverlappingDayRangeUpdateListener(), true);
+        engine.addMatchUpdateListener(Range.Matcher.on(engine), ListenerFactory.getRangeUpdateListener(), true);
+        engine.addMatchUpdateListener(ScheduleRange.Matcher.on(engine), ListenerFactory.getScheduleRangeUpdateListener(), true);
+        engine.addMatchUpdateListener(TimeRange.Matcher.on(engine), ListenerFactory.getTimeRangeUpdateListener(), true);
     }
 
-    private EventDrivenTransformation createTransformation() {
-        EventDrivenTransformation transformation = null;
-        this.manipulation = new SimpleModelManipulations(this.engine);
-        transformation = EventDrivenTransformation.forEngine(this.engine)
-        		//.addRule(this.addInheritedDemarcations())
-        		.build();
-        return transformation;
-    }
-
-    private BatchTransformation createTransformation2() {
-        BatchTransformation transformation = null;
-        transformation = BatchTransformation.forEngine(this.engine).build();
-        return transformation;
-    }
-
-//    private EventDrivenTransformationRule<MissingInheritedDemarcation.Match, MissingInheritedDemarcation.Matcher> addInheritedDemarcations() {
-//        final Consumer<MissingInheritedDemarcation.Match> function = (MissingInheritedDemarcation.Match it) -> {
-//            it.getRoleSenior().getRDH().add(it.getDemarcation());
-//        };
-//        final EventDrivenTransformationRule<MissingInheritedDemarcation.Match, MissingInheritedDemarcation.Matcher> exampleRule =
-//                this._eventDrivenTransformationRuleFactory.createRule(MissingInheritedDemarcation.instance()).action(
-//                        CRUDActivationStateEnum.CREATED, function).action(
-//                        CRUDActivationStateEnum.UPDATED, (MissingInheritedDemarcation.Match it) -> {
-//                        }).action(
-//                        CRUDActivationStateEnum.DELETED, (MissingInheritedDemarcation.Match it) -> {
-//                        }).addLifeCycle(Lifecycles.getDefault(true, true)).build();
-//        return exampleRule;
-//    }
-
-    public void dispose() {
-        if (!Objects.equal(this.transformation, null)) {
-            this.transformation.dispose();
-        }
-        this.transformation = null;
-        return;
-    }
 }

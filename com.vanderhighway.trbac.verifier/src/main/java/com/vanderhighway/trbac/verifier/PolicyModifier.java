@@ -16,20 +16,13 @@ import org.apache.log4j.Logger;
 import org.eclipse.collections.impl.lazy.parallel.Batch;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.*;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.viatra.query.runtime.api.AdvancedViatraQueryEngine;
-import org.eclipse.viatra.transformation.evm.specific.Lifecycles;
-import org.eclipse.viatra.transformation.evm.specific.crud.CRUDActivationStateEnum;
 import org.eclipse.viatra.transformation.runtime.emf.modelmanipulation.IModelManipulations;
 import org.eclipse.viatra.transformation.runtime.emf.modelmanipulation.ModelManipulationException;
 import org.eclipse.viatra.transformation.runtime.emf.modelmanipulation.SimpleModelManipulations;
 import org.eclipse.viatra.transformation.runtime.emf.rules.batch.BatchTransformationRule;
 import org.eclipse.viatra.transformation.runtime.emf.rules.batch.BatchTransformationRuleFactory;
-import org.eclipse.viatra.transformation.runtime.emf.rules.eventdriven.EventDrivenTransformationRule;
-import org.eclipse.viatra.transformation.runtime.emf.rules.eventdriven.EventDrivenTransformationRuleFactory;
 import org.eclipse.viatra.transformation.runtime.emf.transformation.batch.BatchTransformation;
-import org.eclipse.viatra.transformation.runtime.emf.transformation.batch.BatchTransformationStatements;
-import org.eclipse.viatra.transformation.runtime.emf.transformation.eventdriven.EventDrivenTransformation;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.Extension;
 
@@ -41,7 +34,7 @@ public class PolicyModifier {
 	 */
 
 	@Extension
-	private IModelManipulations manipulation;
+	public IModelManipulations manipulation;
 
 	@Extension
 	private BatchTransformationRuleFactory batchFactory = new BatchTransformationRuleFactory();
@@ -59,7 +52,6 @@ public class PolicyModifier {
 		this.manipulation = new SimpleModelManipulations(this.engine);
 		this.transformation = BatchTransformation.forEngine(this.engine).build();
 	}
-
 
 	// ---------- Add / Remove Authorization Model Entities ----------
 
@@ -93,6 +85,28 @@ public class PolicyModifier {
 
 	public BatchTransformationRule removePermission(String name) {
 		return removeNamedEntity(ePackage.getPermission(), ePackage.getPolicy_Permissions(), ePackage.getPermission_Name(), name);
+	}
+
+	public BatchTransformationRule addScheduleRange(EObject day, String name, int startTime, int endTime){
+		final Consumer<Policy.Match> function = (Policy.Match it) -> {
+			EObject daySchedule = null;
+			try {
+				daySchedule = this.manipulation.createChild(day, ePackage.getDaySchedule_Scheduleranges(), ePackage.getScheduleRange());
+				this.manipulation.set(daySchedule, ePackage.getScheduleRange_Name(), name);
+				this.manipulation.set(daySchedule, ePackage.getScheduleRange_Starttime(), startTime);
+				this.manipulation.set(daySchedule, ePackage.getScheduleRange_Endtime(), endTime);
+			} catch (ModelManipulationException e) {
+				e.printStackTrace();
+			}
+		};
+		final BatchTransformationRule<Policy.Match, Policy.Matcher> exampleRule =
+				this.batchFactory.createRule(Policy.instance()).action(function)
+						.name("add-schedulerange-" + day.toString() + '-' + name + "-" + startTime + "-" + endTime).build();
+		return exampleRule;
+	}
+
+	public BatchTransformationRule removeScheduleRange(String day, String name) {
+		return null;
 	}
 
 	// -----------------------------------------------
@@ -170,13 +184,15 @@ public class PolicyModifier {
 				}
 				EObject entity = this.manipulation.createChild(it.getPolicy(), containmentReference, clazz);
 				this.manipulation.set(entity, nameFeature, name);
+
 			} catch (ModelManipulationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		};
 		final BatchTransformationRule<Policy.Match, Policy.Matcher> exampleRule =
-				this.batchFactory.createRule(Policy.instance()).action(function).build();
+				this.batchFactory.createRule(Policy.instance()).action(function)
+				.name("create-named-entity-" + clazz.getName() + '-' + name).build();
 		return exampleRule;
 	}
 

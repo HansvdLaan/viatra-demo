@@ -34,24 +34,32 @@ public class PolicyValidatorMain {
 		Resource.Factory.Registry.INSTANCE.getContentTypeToFactoryMap().put("*", new XMIResourceFactoryImpl());
 
 		ResourceSet set = new ResourceSetImpl();
-		//URI uri = URI.createFileURI("models/basic/role_inheritance.trbac");
-		URI uri = URI.createFileURI("com.vanderhighway.trbac.verifier/models/basic/role_inheritance.trbac");
+		URI uri = URI.createFileURI("models/basic/intervals.trbac");
+		//URI uri = URI.createFileURI("com.vanderhighway.trbac.verifier/models/basic/intervals.trbac");
 		set.getResource(uri, true);
 
 		final AdvancedViatraQueryEngine engine = AdvancedViatraQueryEngine.createUnmanagedEngine(new EMFScope(set));
 
-		PolicyValidator validator = new PolicyValidator(engine);
 		PolicyModifier modifier = new PolicyModifier(engine);
+		PolicyValidator validator = new PolicyValidator(engine);
+		PolicyAutomaticModifier automaticModifier = new PolicyAutomaticModifier(engine, modifier);
+		automaticModifier.initialize();
+		automaticModifier.execute();
 
-		validator.initialize();
-		validator.execute();
+		//validator.initialize();
+		//validator.execute();
 		//validator.dispose();
 
-		modifier.execute(modifier.addRole("R4"));
-		modifier.execute(modifier.addRoleInheritance("R3", "R4"));
-		modifier.execute(modifier.assignRoleToUser("U4", "R4"));
-		
-		
+//		modifier.execute(modifier.addRole("R4"));
+//		modifier.execute(modifier.addRoleInheritance("R3", "R4"));
+//		modifier.execute(modifier.assignRoleToUser("U4", "R4"));
+//
+		modifier.execute(modifier.addRole("RoleTest"));
+		modifier.execute(modifier.addRole("RoleTest2"));
+		modifier.execute(modifier.addRole("RoleTest3"));
+//		modifier.execute(modifier.assignRoleToUser("UserTest", "R1"));
+//		modifier.execute(modifier.assignRoleToUser("UserTest", "R2"));
+
 		modifier.dispose();
 
 		System.out.println("Done!");
