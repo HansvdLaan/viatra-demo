@@ -1,36 +1,13 @@
-package com.vanderhighway.trbac.verifier;
+package com.vanderhighway.trbac.verifier.modifier;
 
-import com.brein.time.timeintervals.collections.ListIntervalCollection;
 import com.brein.time.timeintervals.indexes.IntervalTree;
-import com.brein.time.timeintervals.indexes.IntervalTreeBuilder;
-import com.brein.time.timeintervals.intervals.IInterval;
-import com.brein.time.timeintervals.intervals.IdInterval;
 import com.brein.time.timeintervals.intervals.IntegerInterval;
-import com.google.common.base.Objects;
-import com.vanderhighway.trbac.model.trbac.model.TRBACPackage;
 
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 import org.apache.log4j.Logger;
-import org.beryx.textio.TextTerminal;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.viatra.query.runtime.api.AdvancedViatraQueryEngine;
-import org.eclipse.viatra.transformation.evm.specific.Lifecycles;
-import org.eclipse.viatra.transformation.evm.specific.crud.CRUDActivationStateEnum;
-import org.eclipse.viatra.transformation.runtime.emf.modelmanipulation.IModelManipulations;
-import org.eclipse.viatra.transformation.runtime.emf.modelmanipulation.ModelManipulationException;
-import org.eclipse.viatra.transformation.runtime.emf.modelmanipulation.SimpleModelManipulations;
-import org.eclipse.viatra.transformation.runtime.emf.rules.batch.BatchTransformationRule;
-import org.eclipse.viatra.transformation.runtime.emf.rules.batch.BatchTransformationRuleFactory;
-import org.eclipse.viatra.transformation.runtime.emf.rules.eventdriven.EventDrivenTransformationRule;
-import org.eclipse.viatra.transformation.runtime.emf.rules.eventdriven.EventDrivenTransformationRuleFactory;
-import org.eclipse.viatra.transformation.runtime.emf.transformation.batch.BatchTransformation;
-import org.eclipse.viatra.transformation.runtime.emf.transformation.batch.BatchTransformationStatements;
-import org.eclipse.viatra.transformation.runtime.emf.transformation.eventdriven.EventDrivenTransformation;
 import org.eclipse.xtext.xbase.lib.Extension;
 
 @SuppressWarnings("all")
@@ -69,20 +46,34 @@ public class PolicyValidator {
         //engine.addMatchUpdateListener(PrerequisiteVaultImpliesOpenOffice.Matcher.on(engine), ListenerFactory.getPrerequisiteVaultImpliesOpenOfficeUpdateListener(), true);
 
         // Add Role Name Listener
-        engine.addMatchUpdateListener(RoleName.Matcher.on(engine), ListenerFactory.getRoleNameMatchUpdateListener(), true);
+        //engine.addMatchUpdateListener(RoleName.Matcher.on(engine), ListenerFactory.getRoleNameMatchUpdateListener(), true);
 
         //engine.addMatchUpdateListener(MissingInheritedDemarcation.Matcher.on(engine), ListenerFactory.getMissingInheritedDemarcationUpdateListener(), true);
         //engine.addMatchUpdateListener(InheritedDemarcation.Matcher.on(engine), ListenerFactory.getInheritedDemarcationUpdateListener(), true);
 
         // Add Access Relation Listener
-        engine.addMatchUpdateListener(AllJuniors.Matcher.on(engine), ListenerFactory.getAllJuniorsUpdateListener(), true);
+        //engine.addMatchUpdateListener(AllJuniors.Matcher.on(engine), ListenerFactory.getAllJuniorsUpdateListener(), true);
         //engine.addMatchUpdateListener(AccessRelation.Matcher.on(engine), ListenerFactory.getAccessRelationUpdateListener(), true);
-        engine.addMatchUpdateListener(AccessRelation2.Matcher.on(engine), ListenerFactory.getAccessRelation2UpdateListener(), true);
+        //engine.addMatchUpdateListener(AccessRelation2.Matcher.on(engine), ListenerFactory.getAccessRelation2UpdateListener(), true);
 //        engine.addMatchUpdateListener(DayRange.Matcher.on(engine), ListenerFactory.getDayRangeUpdateListener(), true);
 //        engine.addMatchUpdateListener(NonOverlappingDayRange.Matcher.on(engine), ListenerFactory.getNonOverlappingDayRangeUpdateListener(), true);
-        engine.addMatchUpdateListener(Range.Matcher.on(engine), ListenerFactory.getRangeUpdateListener(), true);
-        engine.addMatchUpdateListener(ScheduleRange.Matcher.on(engine), ListenerFactory.getScheduleRangeUpdateListener(), true);
-        engine.addMatchUpdateListener(TimeRange.Matcher.on(engine), ListenerFactory.getTimeRangeUpdateListener(), true);
+        //engine.addMatchUpdateListener(RangeP.Matcher.on(engine), ListenerFactory.getRangeUpdateListener(), true);
+        //engine.addMatchUpdateListener(ScheduleRangeP.Matcher.on(engine), ListenerFactory.getScheduleRangeUpdateListener(), true);
+        //engine.addMatchUpdateListener(TimeRange.Matcher.on(engine), ListenerFactory.getTimeRangeUpdateListener(), true);
+        //engine.addMatchUpdateListener(SetTestQuery.Matcher.on(engine), ListenerFactory.getSetTestQueryUpdateListener(), true);
+        //engine.addMatchUpdateListener(TimeRangeGroupsDistinct.Matcher.on(engine), ListenerFactory.getTimeRangeGroupDistinctUpdateListener(), true);
+        //engine.addMatchUpdateListener(DistinctGroups.Matcher.on(engine), ListenerFactory.getDistinctGroupsUpdateListener(), true);
+
+        //engine.addMatchUpdateListener(AllJuniors.Matcher.on(engine), ListenerFactory.getAllJuniorsUpdateListener(), true);
+        //engine.addMatchUpdateListener(TimeRangeGroupCollection.Matcher.on(engine), ListenerFactory.getTimeRangeGroupCombinationsUpdateListener(), true);
+        //engine.addMatchUpdateListener(TimeRangeGroupCollectionHasGroup.Matcher.on(engine), ListenerFactory.getTimeRangeGroupCollectionHasGroupUpdateListener(), true);
+        //engine.addMatchUpdateListener(TimeRangeGroupCollectionEnabled.Matcher.on(engine), ListenerFactory.getTimeRangeGroupCollectionEnabledUpdateListener(), true);
+
+        //engine.addMatchUpdateListener(EnabledPriority.Matcher.on(engine), ListenerFactory.getEnabledPriorityUpdateListener(), true);
+        //engine.addMatchUpdateListener(DisabledPriority.Matcher.on(engine), ListenerFactory.getDisabledPriorityUpdateListener(), true);
+        //engine.addMatchUpdateListener(AllJuniors.Matcher.on(engine), ListenerFactory.getAllJuniorsUpdateListener(), true);
+
+        //engine.addMatchUpdateListener(TimeRangeGroup.Matcher.on(engine), ListenerFactory.getTimeRangeGroupUpdateListener(), true);
     }
 
 }

@@ -1,10 +1,12 @@
-package com.vanderhighway.trbac.verifier;
+package com.vanderhighway.trbac.verifier.modifier;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import com.vanderhighway.trbac.model.trbac.model.*;
+import com.vanderhighway.trbac.verifier.*;
 import org.eclipse.viatra.query.runtime.api.IMatchUpdateListener;
-import com.vanderhighway.trbac.verifier.UserShouldHaveARole;
 
 public class ListenerFactory {
 
@@ -205,20 +207,20 @@ public class ListenerFactory {
 		};
 	}
 	
-	public static IMatchUpdateListener<AccessRelation2.Match> getAccessRelation2UpdateListener() {
-		return new IMatchUpdateListener<AccessRelation2.Match>() {
-			@Override
-			public void notifyAppearance(AccessRelation2.Match match) {
-				System.out.printf("[ADD AccessRelation2 Match] %s %n", match.prettyPrint());
-			}
-
-			@Override
-			public void notifyDisappearance(AccessRelation2.Match match) {
-				System.out.printf("[REM AccessRelation2 Match] %s %n", match.prettyPrint());
-
-			}
-		};
-	}
+//	public static IMatchUpdateListener<AccessRelationWithHierarchies.Match> getAccessRelationWithHierarchiesUpdateListener() {
+//		return new IMatchUpdateListener<AccessRelationWithHierarchies.Match>() {
+//			@Override
+//			public void notifyAppearance(AccessRelationWithHierarchies.Match match) {
+//				System.out.printf("[ADD AccessRelation2 Match] %s %n", match.prettyPrint());
+//			}
+//
+//			@Override
+//			public void notifyDisappearance(AccessRelationWithHierarchies.Match match) {
+//				System.out.printf("[REM AccessRelation2 Match] %s %n", match.prettyPrint());
+//
+//			}
+//		};
+//	}
 	
 	public static IMatchUpdateListener<AllJuniors.Match> getAllJuniorsUpdateListener() {
 		return new IMatchUpdateListener<AllJuniors.Match>() {
@@ -234,34 +236,124 @@ public class ListenerFactory {
 			}
 		};
 	}
-//
-//	public static IMatchUpdateListener<MissingInheritedDemarcation.Match> getMissingInheritedDemarcationUpdateListener() {
-//		return new IMatchUpdateListener<MissingInheritedDemarcation.Match>() {
+
+	public static IMatchUpdateListener<RangeP.Match> getRangeUpdateListener() {
+		return new IMatchUpdateListener<RangeP.Match>() {
+			@Override
+			public void notifyAppearance(RangeP.Match match) {
+				//System.out.printf("[ADD Range Match] %s %n", match.prettyPrint());
+			}
+
+			@Override
+			public void notifyDisappearance(RangeP.Match match) {
+				//System.out.printf("[REM Range Match] %s %n", match.prettyPrint());
+
+			}
+		};
+	}
+
+//	public static IMatchUpdateListener<TimeRangeGroupCollection.Match> getTimeRangeGroupCombinationsUpdateListener() {
+//		return new IMatchUpdateListener<TimeRangeGroupCollection.Match>() {
 //			@Override
-//			public void notifyAppearance(MissingInheritedDemarcation.Match match) {
-//				System.out.printf("[ADD MissingInheritedDemarcation Match] %s %n", match.prettyPrint());
+//			public void notifyAppearance(TimeRangeGroupCollection.Match match) {
+//				Set<TimeRangeGroup> groups = (Set<TimeRangeGroup>) match.getGroups();
+//				Set<String> groupNames = groups.stream().map(x -> x.getName()).collect(Collectors.toSet());
+//				System.out.printf("[ADD TimeRangeGroupCombinations Match] %s %n", groupNames);
 //			}
 //
 //			@Override
-//			public void notifyDisappearance(MissingInheritedDemarcation.Match match) {
-//				System.out.printf("[REM MissingInheritedDemarcation Match] %s %n", match.prettyPrint());
-//
+//			public void notifyDisappearance(TimeRangeGroupCollection.Match match) {
+//				Set<TimeRangeGroup> groups = (Set<TimeRangeGroup>) match.getGroups();
+//				Set<String> groupNames = groups.stream().map(x -> x.getName()).collect(Collectors.toSet());
+//				System.out.printf("[REM TimeRangeGroupCombinations Match] %s %n", groupNames);
 //			}
 //		};
 //	}
-//	
-//	public static IMatchUpdateListener<InheritedDemarcation.Match> getInheritedDemarcationUpdateListener() {
-//		return new IMatchUpdateListener<InheritedDemarcation.Match>() {
+//
+//	public static IMatchUpdateListener<TimeRangeGroupCollectionHasGroup.Match> getTimeRangeGroupCollectionHasGroupUpdateListener() {
+//		return new IMatchUpdateListener<TimeRangeGroupCollectionHasGroup.Match>() {
 //			@Override
-//			public void notifyAppearance(InheritedDemarcation.Match match) {
-//				System.out.printf("[ADD InheritedDemarcation Match] %s %n", match.prettyPrint());
+//			public void notifyAppearance(TimeRangeGroupCollectionHasGroup.Match match) {
+//				Set<TimeRangeGroup> groups = (Set<TimeRangeGroup>) match.getGroups();
+//				Set<String> groupNames = groups.stream().map(x -> x.getName()).collect(Collectors.toSet());
+//				String groupName = match.getGroup().getName();
+//				System.out.println("[ADD TimeRangeGroupCollectionHasGroup Match]" + groupNames + " has " + groupName);
 //			}
 //
 //			@Override
-//			public void notifyDisappearance(InheritedDemarcation.Match match) {
-//				System.out.printf("[REM InheritedDemarcation Match] %s %n", match.prettyPrint());
-//
+//			public void notifyDisappearance(TimeRangeGroupCollectionHasGroup.Match match) {
+//				Set<TimeRangeGroup> groups = (Set<TimeRangeGroup>) match.getGroups();
+//				Set<String> groupNames = groups.stream().map(x -> x.getName()).collect(Collectors.toSet());
+//				String groupName = match.getGroup().getName();
+//				System.out.println("[ADD TimeRangeGroupCollectionHasGroup Match]" + groupNames + " has " + groupName);
 //			}
 //		};
 //	}
+//
+//	public static IMatchUpdateListener<TimeRangeGroupCollectionEnabled.Match> getTimeRangeGroupCollectionEnabledUpdateListener() {
+//		return new IMatchUpdateListener<TimeRangeGroupCollectionEnabled.Match>() {
+//			@Override
+//			public void notifyAppearance(TimeRangeGroupCollectionEnabled.Match match) {
+//				Set<TimeRangeGroup> groups = (Set<TimeRangeGroup>) match.getGroups();
+//				Set<String> groupNames = groups.stream().map(x -> x.getName()).collect(Collectors.toSet());
+//				String roleName = match.getRole().getName();
+//				String demarcationName = match.getDemarcation().getName();
+//				System.out.println("[ADD TimeRangeGroupCollectionEnabled Match]" + groupNames + " -> " + roleName + "-" + demarcationName);
+//			}
+//
+//			@Override
+//			public void notifyDisappearance(TimeRangeGroupCollectionEnabled.Match match) {
+//				Set<TimeRangeGroup> groups = (Set<TimeRangeGroup>) match.getGroups();
+//				Set<String> groupNames = groups.stream().map(x -> x.getName()).collect(Collectors.toSet());
+//				String roleName = match.getRole().getName();
+//				String demarcationName = match.getDemarcation().getName();
+//				System.out.println("[ADD TimeRangeGroupCollectionEnabled Match]" + groupNames + " -> " + roleName + "-" + demarcationName);
+//			}
+//		};
+//	}
+//
+//	public static IMatchUpdateListener<EnabledPriority.Match> getEnabledPriorityUpdateListener() {
+//		return new IMatchUpdateListener<EnabledPriority.Match>() {
+//			@Override
+//			public void notifyAppearance(EnabledPriority.Match match) {
+//				Set<TimeRangeGroup> groups = (Set<TimeRangeGroup>) match.getGroups();
+//				Set<String> groupNames = groups.stream().map(x -> x.getName()).collect(Collectors.toSet());
+//				String roleName = match.getRole().getName();
+//				String demarcationName = match.getDemarcation().getName();
+//				System.out.println("[ADD EnabledPriority Match]" + groupNames + " -> " + roleName + "-" + demarcationName);
+//			}
+//
+//			@Override
+//			public void notifyDisappearance(EnabledPriority.Match match) {
+//				Set<TimeRangeGroup> groups = (Set<TimeRangeGroup>) match.getGroups();
+//				Set<String> groupNames = groups.stream().map(x -> x.getName()).collect(Collectors.toSet());
+//				String roleName = match.getRole().getName();
+//				String demarcationName = match.getDemarcation().getName();
+//				System.out.println("[ADD EnabledPriority Match]" + groupNames + " -> " + roleName + "-" + demarcationName);
+//			}
+//		};
+//	}
+//
+//	public static IMatchUpdateListener<DisabledPriority.Match> getDisabledPriorityUpdateListener() {
+//		return new IMatchUpdateListener<DisabledPriority.Match>() {
+//			@Override
+//			public void notifyAppearance(DisabledPriority.Match match) {
+//				Set<TimeRangeGroup> groups = (Set<TimeRangeGroup>) match.getGroups();
+//				Set<String> groupNames = groups.stream().map(x -> x.getName()).collect(Collectors.toSet());
+//				String roleName = match.getRole().getName();
+//				String demarcationName = match.getDemarcation().getName();
+//				System.out.println("[ADD DisabledPriority Match]" + groupNames + " -> " + roleName + "-" + demarcationName);
+//			}
+//
+//			@Override
+//			public void notifyDisappearance(DisabledPriority.Match match) {
+//				Set<TimeRangeGroup> groups = (Set<TimeRangeGroup>) match.getGroups();
+//				Set<String> groupNames = groups.stream().map(x -> x.getName()).collect(Collectors.toSet());
+//				String roleName = match.getRole().getName();
+//				String demarcationName = match.getDemarcation().getName();
+//				System.out.println("[ADD DisabledPriority Match]" + groupNames + " -> " + roleName + "-" + demarcationName);
+//			}
+//		};
+//	}
+
 }
