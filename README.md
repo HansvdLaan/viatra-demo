@@ -11,7 +11,7 @@ To use in Eclipse, install the following plug-ins:
 
 To set up the project in eclipse:
 1. Right click on the module `com.vanderhighway.trbac.model`, Configure -> Convert to modelling project.
-2. Right click on the module `com.vanderhighway.trbac.verifier`, Configure -> Convert to VIATRA Query project.
+2. Right click on the module `com.vanderhighway.trbac.patterns`, Configure -> Convert to VIATRA Query project.
 
 To build the project:
 1. Go to the `com.vanderhighway.trbac.model` project and generate the model code with the `model/petrinet.genmodel` file.

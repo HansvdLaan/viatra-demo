@@ -25,8 +25,11 @@
 			</activation>
 			<modules>
 				<module>com.vanderhighway.trbac.model</module>
-				<module>com.vanderhighway.trbac.verifier</module>
+				<module>com.vanderhighway.trbac.patterns</module>
 				<module>com.vanderhighway.trbac.aggregators</module>
+				<module>com.vanderhighway.trbac.core</module>
+				<module>com.vanderhighway.trbac.cli</module>
+				<module>com.vanderhighway.trbac.generators</module>
 			</modules>
 		</profile>
 	</profiles>
