@@ -26,6 +26,7 @@
 			<modules>
 				<module>com.vanderhighway.trbac.model</module>
 				<module>com.vanderhighway.trbac.verifier</module>
+				<module>com.vanderhighway.trbac.aggregators</module>
 			</modules>
 		</profile>
 	</profiles>

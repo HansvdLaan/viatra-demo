@@ -1,18 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2010-2015, Zoltan Ujhelyi, Gabor Szarnyas
- * This program and the accompanying materials are made available under the
- * terms of the Eclipse Public License v. 2.0 which is available at
- * http://www.eclipse.org/legal/epl-v20.html.
- * 
- * SPDX-License-Identifier: EPL-2.0
+ * Policy Queries
  *******************************************************************************/
 package com.vanderhighway.trbac.verifier
 
 import "https://vanderhighway.com/trbac/2020"
 import "http://www.eclipse.org/emf/2002/Ecore"
 import java ^java.util.Set
-import java ^java.util.HashSet
-//import java ^com.vanderhighway.trbac.verifier.aggregator
+//import java ^java.util.HashSet
+import java ^com.vanderhighway.trbac.aggregators.distinct
+import java ^com.vanderhighway.trbac.aggregators.TimeRangeGroupSet
 
 // Policy
 pattern policyP(policy: Policy) {
@@ -68,7 +64,7 @@ pattern accessRelation(user: User, permission: Permission) {
    	Demarcation.DP(demarcation, permission);
 }
 
-pattern accessRelation2(user: User, permission: Permission) {
+pattern accessRelationWithHierarchies(user: User, permission: Permission) {
     User.UR(user,role);
     find allJuniorsIncludingSelf(role, roleP);
     Role.RD(roleP, demarcation);
@@ -169,37 +165,142 @@ pattern RangeP(daySchedule: DaySchedule, group: TimeRangeGroup, timeRange: TimeR
 	TimeRange.start(timeRange,starttime);
 	TimeRange.end(timeRange,endtime);
 }
-//
-//
-//pattern TimeRange(in weekday: DayOfWeekSchedule, out wsr: DayScheduleTimeRange, in yearday: DayOfMonthSchedule, 
-//	out ysr: DayScheduleTimeRange, out starttime: java Integer, out endtime: java Integer) {
-//	DayOfWeekSchedule(weekday);
-//	DayOfMonthSchedule(yearday);
-//	DayOfWeekSchedule.scheduleranges(weekday, wsr);
-//	DayOfMonthSchedule.scheduleranges(yearday, ysr);
-//	DayScheduleTimeRange.start(wsr, wsr_start);
-//	DayScheduleTimeRange.start(ysr, ysr_start);
-//	DayScheduleTimeRange.end(wsr, wsr_end);
-//	DayScheduleTimeRange.end(ysr, ysr_end);
-//
-//	check( (wsr_start <= ysr_start && ysr_start <= wsr_end) ||  (ysr_start <= wsr_start && wsr_start <= ysr_end));
-//
-//	starttime == eval(Math.max(wsr_start, ysr_start));
-//	endtime == eval(Math.min(wsr_end, ysr_end));
-//}
-//
-//pattern TimeRangeGroup(in weekday: DayOfWeekSchedule, in yearday: DayOfMonthSchedule, 
+
+pattern DayOfWeekAndMonthSchedule(out weekSchedule: DayOfWeekSchedule, out monthSchedule: DayOfMonthSchedule) {
+	DayOfWeekSchedule(weekSchedule);
+	DayOfMonthSchedule(monthSchedule);
+}
+
+pattern DayOfWeekAndMonthScheduleTimeRange( weekSchedule: DayOfWeekSchedule, monthSchedule: DayOfMonthSchedule,  
+	 wstr: DayScheduleTimeRange,  mstr: DayScheduleTimeRange,
+	 starttime: java Integer,  endtime: java Integer) {
+	find DayOfWeekAndMonthSchedule(weekSchedule, monthSchedule);
+	DayOfWeekSchedule.dayScheduleTimeRanges(weekSchedule, wstr);
+	DayOfMonthSchedule.dayScheduleTimeRanges(monthSchedule, mstr);
+	DayScheduleTimeRange.start(wstr, wstr_start);
+	DayScheduleTimeRange.start(mstr, mstr_start);
+	DayScheduleTimeRange.end(wstr, wstr_end);
+	DayScheduleTimeRange.end(mstr, mstr_end);
+
+	check( (wstr_start <= mstr_start && mstr_start <= wstr_end) ||  (mstr_start <= wstr_start && wstr_start <= mstr_end));
+
+	starttime == eval(Math.max(wstr_start, mstr_start));
+	endtime == eval(Math.min(wstr_end, mstr_end));
+}
+
+pattern DateScheduleTimeRange(in yearDaySchedule: DayOfYearSchedule, in wstr: DayScheduleTimeRange, in mstr: DayScheduleTimeRange,
+	in ystr: DayScheduleTimeRange, out starttime: java Integer, out endtime: java Integer) {
+	DayOfYearSchedule.dayOfWeekSchedule(yearDaySchedule, weekSchedule);
+	DayOfYearSchedule.dayOfMonthSchedule(yearDaySchedule, monthSchedule);
+	DayOfYearSchedule.dayScheduleTimeRanges(yearDaySchedule, ystr);
+	find DayOfWeekAndMonthScheduleTimeRange(weekSchedule, monthSchedule, wstr, mstr, dwtr_start, dwtr_end);
+	starttime == dwtr_start;
+	endtime == dwtr_end;
+	DayScheduleTimeRange.start(ystr, ystr_start);
+	DayScheduleTimeRange.end(ystr, ystr_end);
+	
+	check( (dwtr_start <= ystr_start && ystr_start <= dwtr_end) ||  (ystr_start <= dwtr_start && dwtr_start <= ystr_end));
+
+	starttime == eval(Math.max(dwtr_start, ystr_start));
+	endtime == eval(Math.min(dwtr_end, ystr_end));
+}
+
+pattern TimeRangeGroup_DateScheduleTimeRange(group: TimeRangeGroup, in yearDaySchedule: DayOfYearSchedule, out starttime: java Integer, 
+	out endtime: java Integer
+) {
+	find DateScheduleTimeRange(yearDaySchedule, wstr, _, _, starttime, endtime);
+	DayScheduleTimeRange.timeRanges(wstr, tr);
+	TimeRangeGroup.timeRanges(group, tr);
+} or {
+	find DateScheduleTimeRange(yearDaySchedule,  _, mstr, _, starttime, endtime);
+	DayScheduleTimeRange.timeRanges(mstr, tr);
+	TimeRangeGroup.timeRanges(group, tr);
+} or {
+	find DateScheduleTimeRange(yearDaySchedule, _, _, ystr, starttime, endtime);
+	DayScheduleTimeRange.timeRanges(ystr, tr);
+	TimeRangeGroup.timeRanges(group, tr);
+}
+
+pattern DateScheduleTimeRange_TimeRangeGroup(in yearDaySchedule: DayOfYearSchedule, out starttime: java Integer, 
+	out endtime: java Integer, group: TimeRangeGroup) {
+		find TimeRangeGroup_DateScheduleTimeRange(group,yearDaySchedule,starttime,endtime);
+	}
+
+pattern DateScheduleTimeRange_To_TimeRangeGroupCombination(in yearDaySchedule: DayOfYearSchedule, out starttime: java Integer, 
+	out endtime: java Integer, groups: java TimeRangeGroupSet) {
+	find DateScheduleTimeRange(yearDaySchedule,  _, _, _, starttime, endtime);
+	groups == distinct find DateScheduleTimeRange_TimeRangeGroup(yearDaySchedule, starttime, endtime, #group);
+}
+
+pattern TimeRangeGroupCollection(groups: java TimeRangeGroupSet) {
+	find DateScheduleTimeRange_To_TimeRangeGroupCombination(_, _, _, groups);
+}
+
+pattern TimeRangeGroupCollectionHasGroup(groups: java TimeRangeGroupSet, group: TimeRangeGroup) {
+	find DateScheduleTimeRange(ys, _, _, _, start, end);
+	find DateScheduleTimeRange_To_TimeRangeGroupCombination(ys, start, end, groups);
+	find DateScheduleTimeRange_TimeRangeGroup(ys, start, end, group);
+}
+
+pattern TimeRangeGroupCollectionEnabled(groups: java TimeRangeGroupSet, role: Role, demarcation: Demarcation) {
+	find DateScheduleTimeRange_To_TimeRangeGroupCombination(_, _, _, groups);
+	Role.RD(role,demarcation);
+	maxEnabledPriority == max find EnabledPriority(groups, role, demarcation, #p);
+	maxDisabledPriority == max find DisabledPriority(groups, role, demarcation, #p2);
+	check(maxEnabledPriority >= maxDisabledPriority);
+} or {
+	find DateScheduleTimeRange_To_TimeRangeGroupCombination(_, _, _, groups);
+	Role.RD(role,demarcation);
+	find EnabledPriority(groups, role, demarcation, _);
+	neg find DisabledPriority(groups, role, demarcation, _);
+}
+
+pattern EnabledPriority(groups: java TimeRangeGroupSet, role: Role, demarcation: Demarcation, priority: java Integer) {
+	find TimeRangeGroupCollectionHasGroup(groups,group);
+	TimeRangeGroup.periodicEvents(group, rule);
+	PeriodicEvent.enable(rule, enabled);
+	check(enabled);
+	Role.constraintedBy(role, rule);
+	Demarcation.constrainedBy(demarcation, rule);
+	PeriodicEvent.priority(rule, priority);
+}
+
+
+pattern DisabledPriority(groups: java TimeRangeGroupSet, role: Role, demarcation: Demarcation, priority: java Integer) {
+	find TimeRangeGroupCollectionHasGroup(groups,group);
+	TimeRangeGroup.periodicEvents(group, rule);
+	PeriodicEvent.enable(rule, false);
+	PeriodicEvent.enable(rule, enabled);
+	check(!enabled);
+	Role.constraintedBy(role, rule);
+	Demarcation.constrainedBy(demarcation, rule);
+	PeriodicEvent.priority(rule, priority);
+}
+
+
+//pattern DayOfWeekAndMonthScheduleTimeRangeRangeGroup(out weekSchedule: DayOfWeekSchedule, out monthSchedule: DayOfMonthSchedule, 
 //	out starttime: java Integer, out endtime: java Integer, group: TimeRangeGroup
 //) {
-//	find TimeRange(weekday, wsr, yearday, _, starttime, endtime);
-//	DayScheduleTimeRange.timeRange(wsr, weekrange);
-//	TimeRangeGroup.ranges(group, weekrange);
+//	find DayOfWeekAndMonthScheduleTimeRange(weekSchedule, monthSchedule, wstr, _, starttime, endtime);
+//	DayScheduleTimeRange.timeRanges(wstr, tr);
+//	TimeRangeGroup.timeRanges(group, tr);
 //} or {
-//	find TimeRange(weekday, _, yearday, ysr, starttime, endtime);
-//	DayScheduleTimeRange.timeRange(ysr, yearrange);
-//	TimeRangeGroup.ranges(group, yearrange);
+//	find DayOfWeekAndMonthScheduleTimeRange(weekSchedule, monthSchedule, _, mstr, starttime, endtime);
+//	DayScheduleTimeRange.timeRanges(mstr, tr);
+//	TimeRangeGroup.timeRanges(group, tr);
+//}
+
+//pattern DayScheduleTimeRangeGroup(in weekday: DayOfWeekSchedule, in yearday: DayOfMonthSchedule, 
+//	out starttime: java Integer, out endtime: java Integer, groups: java Set) {
+//	find DayOfWeekAndMonthScheduleTimeRange(weekday, yearday, wsr, ysr, starttime, endtime);
+//	groups == distinct find DayOfWeekAndMonthScheduleTimeRangeRangeGroup(weekday, yearday, starttime, endtime, #group);
 //}
 //
+//pattern DayScheduleTimeRangeGroup(name: java String, groups: java Set) {
+//	find TimeRange(weekday, wsr, yearday, ysr, starttime, endtime);
+//	groups == distinct find TimeRangeGroup(weekday, yearday, starttime, endtime, #group);
+//}
+
 //pattern TimeRangeGroupsDistinct(in weekday: DayOfWeekSchedule, in yearday: DayOfMonthSchedule, 
 //	out starttime: java Integer, out endtime: java Integer, groups: java Set) {
 //	find TimeRange(weekday, wsr, yearday, ysr, starttime, endtime);
@@ -216,28 +317,6 @@ pattern RangeP(daySchedule: DaySchedule, group: TimeRangeGroup, timeRange: TimeR
 //	find TimeRangeGroup(weekday,yearday,starttime,endtime,group);
 //	TimeRangeGroup.name(group, name); 
 //	check(name != "Always");
-//}
-//
-//pattern myPat (n: sumnum, number: java Integer) {
-//	sumnum(n);
-//	sumnum.num(n,number);
-//}
-//
-//
-//pattern SumNumP(mycount: java Integer) {
-//	mycount == sum find myPat(_a,#x);
-//}
-//
-//pattern SumNumP2(mycount: java Integer) {
-//	mycount == mysum find myPat(_a,#x);
-//}
-//
-//pattern SetTestQuery(myresult: java Set) {
-//	myresult == eval(new HashSet<Integer>());
-//}
-//
-//pattern SumNumP4(myresult: java Set) {
-//	myresult == distinct find myPat(_a,#x);
 //}
 
 
