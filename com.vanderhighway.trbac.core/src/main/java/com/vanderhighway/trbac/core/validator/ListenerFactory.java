@@ -1,10 +1,12 @@
 package com.vanderhighway.trbac.core.validator;
 
+import com.vanderhighway.trbac.model.trbac.model.TimeRangeGroup;
 import com.vanderhighway.trbac.patterns.*;
 import org.eclipse.viatra.query.runtime.api.IMatchUpdateListener;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ListenerFactory {
 
@@ -19,8 +21,8 @@ public class ListenerFactory {
 		updateListeners.add(getOnlyOneOperationsManagerUpdateListener());
 		updateListeners.add(getSoDEmployeeAndContractorUpdateListener());
 		updateListeners.add(getSoDEmployeeAndVisitorUpdateListener());
-		updateListeners.add(getPrerequisiteEveryHasAccessToLobbyUpdateListener());
-		updateListeners.add(getPrerequisiteVaultImpliesOpenOfficeUpdateListener());
+		//updateListeners.add(getPrerequisiteEveryHasAccessToLobbyUpdateListener());
+		//updateListeners.add(getPrerequisiteVaultImpliesOpenOfficeUpdateListener());
 		updateListeners.add(getAccessRelationUpdateListener());
 		return updateListeners;
 	}
@@ -160,41 +162,45 @@ public class ListenerFactory {
 		};
 	}
 
-	public static IMatchUpdateListener<PrerequisiteEverybodyHasAccessToLobby.Match> getPrerequisiteEveryHasAccessToLobbyUpdateListener() {
-		return new IMatchUpdateListener<PrerequisiteEverybodyHasAccessToLobby.Match>() {
-			@Override
-			public void notifyAppearance(PrerequisiteEverybodyHasAccessToLobby.Match match) {
-				System.out.printf("[ADD PrerequisiteEverybodyHasAccessToLobby Match] %s %n", match.prettyPrint());
-			}
-
-			@Override
-			public void notifyDisappearance(PrerequisiteEverybodyHasAccessToLobby.Match match) {
-				System.out.printf("[REM PrerequisiteEverybodyHasAccessToLobby Match] %s %n", match.prettyPrint());
-
-			}
-		};
-	}
-
-	public static IMatchUpdateListener<PrerequisiteVaultImpliesOpenOffice.Match> getPrerequisiteVaultImpliesOpenOfficeUpdateListener() {
-		return new IMatchUpdateListener<PrerequisiteVaultImpliesOpenOffice.Match>() {
-			@Override
-			public void notifyAppearance(PrerequisiteVaultImpliesOpenOffice.Match match) {
-				System.out.printf("[ADD PrerequisiteVaultImpliesOpenOffice Match] %s %n", match.prettyPrint());
-			}
-
-			@Override
-			public void notifyDisappearance(PrerequisiteVaultImpliesOpenOffice.Match match) {
-				System.out.printf("[REM PrerequisiteVaultImpliesOpenOffice Match] %s %n", match.prettyPrint());
-
-			}
-		};
-	}
+//	public static IMatchUpdateListener<PrerequisiteEverybodyHasAccessToLobby.Match> getPrerequisiteEveryHasAccessToLobbyUpdateListener() {
+//		return new IMatchUpdateListener<PrerequisiteEverybodyHasAccessToLobby.Match>() {
+//			@Override
+//			public void notifyAppearance(PrerequisiteEverybodyHasAccessToLobby.Match match) {
+//				System.out.printf("[ADD PrerequisiteEverybodyHasAccessToLobby Match] %s %n", match.prettyPrint());
+//			}
+//
+//			@Override
+//			public void notifyDisappearance(PrerequisiteEverybodyHasAccessToLobby.Match match) {
+//				System.out.printf("[REM PrerequisiteEverybodyHasAccessToLobby Match] %s %n", match.prettyPrint());
+//
+//			}
+//		};
+//	}
+//
+//	public static IMatchUpdateListener<PrerequisiteVaultImpliesOpenOffice.Match> getPrerequisiteVaultImpliesOpenOfficeUpdateListener() {
+//		return new IMatchUpdateListener<PrerequisiteVaultImpliesOpenOffice.Match>() {
+//			@Override
+//			public void notifyAppearance(PrerequisiteVaultImpliesOpenOffice.Match match) {
+//				System.out.printf("[ADD PrerequisiteVaultImpliesOpenOffice Match] %s %n", match.prettyPrint());
+//			}
+//
+//			@Override
+//			public void notifyDisappearance(PrerequisiteVaultImpliesOpenOffice.Match match) {
+//				System.out.printf("[REM PrerequisiteVaultImpliesOpenOffice Match] %s %n", match.prettyPrint());
+//
+//			}
+//		};
+//	}
 
 	public static IMatchUpdateListener<AccessRelation.Match> getAccessRelationUpdateListener() {
 		return new IMatchUpdateListener<AccessRelation.Match>() {
 			@Override
 			public void notifyAppearance(AccessRelation.Match match) {
-				System.out.printf("[ADD AccessRelation Match] %s %n", match.prettyPrint());
+				Set<TimeRangeGroup> groups = (Set<TimeRangeGroup>) match.getGroups();
+				Set<String> groupNames = groups.stream().map(x -> x.getName()).collect(Collectors.toSet());
+				String userName = match.getUser().getName();
+				String permissionName = match.getPermission().getName();
+				System.out.println("[ADD AccessRelation Match] " + userName + " has permission " + permissionName + " during " + groupNames);
 			}
 
 			@Override
@@ -288,27 +294,27 @@ public class ListenerFactory {
 //		};
 //	}
 //
-//	public static IMatchUpdateListener<TimeRangeGroupCollectionEnabled.Match> getTimeRangeGroupCollectionEnabledUpdateListener() {
-//		return new IMatchUpdateListener<TimeRangeGroupCollectionEnabled.Match>() {
-//			@Override
-//			public void notifyAppearance(TimeRangeGroupCollectionEnabled.Match match) {
-//				Set<TimeRangeGroup> groups = (Set<TimeRangeGroup>) match.getGroups();
-//				Set<String> groupNames = groups.stream().map(x -> x.getName()).collect(Collectors.toSet());
-//				String roleName = match.getRole().getName();
-//				String demarcationName = match.getDemarcation().getName();
-//				System.out.println("[ADD TimeRangeGroupCollectionEnabled Match]" + groupNames + " -> " + roleName + "-" + demarcationName);
-//			}
-//
-//			@Override
-//			public void notifyDisappearance(TimeRangeGroupCollectionEnabled.Match match) {
-//				Set<TimeRangeGroup> groups = (Set<TimeRangeGroup>) match.getGroups();
-//				Set<String> groupNames = groups.stream().map(x -> x.getName()).collect(Collectors.toSet());
-//				String roleName = match.getRole().getName();
-//				String demarcationName = match.getDemarcation().getName();
-//				System.out.println("[ADD TimeRangeGroupCollectionEnabled Match]" + groupNames + " -> " + roleName + "-" + demarcationName);
-//			}
-//		};
-//	}
+	public static IMatchUpdateListener<TimeRangeGroupCollectionEnabled.Match> getTimeRangeGroupCollectionEnabledUpdateListener() {
+		return new IMatchUpdateListener<TimeRangeGroupCollectionEnabled.Match>() {
+			@Override
+			public void notifyAppearance(TimeRangeGroupCollectionEnabled.Match match) {
+				Set<TimeRangeGroup> groups = (Set<TimeRangeGroup>) match.getGroups();
+				Set<String> groupNames = groups.stream().map(x -> x.getName()).collect(Collectors.toSet());
+				String roleName = match.getRole().getName();
+				String demarcationName = match.getDemarcation().getName();
+				System.out.println("[ADD TimeRangeGroupCollectionEnabled Match] " + groupNames + " -> " + roleName + "-" + demarcationName);
+			}
+
+			@Override
+			public void notifyDisappearance(TimeRangeGroupCollectionEnabled.Match match) {
+				Set<TimeRangeGroup> groups = (Set<TimeRangeGroup>) match.getGroups();
+				Set<String> groupNames = groups.stream().map(x -> x.getName()).collect(Collectors.toSet());
+				String roleName = match.getRole().getName();
+				String demarcationName = match.getDemarcation().getName();
+				System.out.println("[ADD TimeRangeGroupCollectionEnabled Match]" + groupNames + " -> " + roleName + "-" + demarcationName);
+			}
+		};
+	}
 //
 //	public static IMatchUpdateListener<EnabledPriority.Match> getEnabledPriorityUpdateListener() {
 //		return new IMatchUpdateListener<EnabledPriority.Match>() {

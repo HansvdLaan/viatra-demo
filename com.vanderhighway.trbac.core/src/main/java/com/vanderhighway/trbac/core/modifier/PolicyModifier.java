@@ -15,6 +15,7 @@ import org.eclipse.viatra.transformation.runtime.emf.transformation.batch.BatchT
 import org.eclipse.xtext.xbase.lib.Extension;
 
 import java.lang.reflect.InvocationTargetException;
+import java.time.Period;
 import java.util.concurrent.Callable;
 
 public class PolicyModifier {
@@ -172,6 +173,23 @@ public class PolicyModifier {
 	public void removeDayOfYearSchedule(DayOfYearSchedule schedule) throws ModelManipulationException {
 		manipulation.remove(schedule);
 	}
+
+	public PeriodicEvent addPeriodicEvent(TimeRangeGroup time, String name, Role role, Demarcation demarcation, boolean enable, int priority) throws ModelManipulationException {
+		Schedule schedule = policy.getSchedule();
+		PeriodicEvent event = (PeriodicEvent) manipulation.createChild(schedule, ePackage.getSchedule_Periodicevent(), ePackage.getPeriodicEvent());
+		manipulation.addTo(event, ePackage.getPeriodicEvent_TimeRangeGroups(), time);
+		manipulation.set(event, ePackage.getPeriodicEvent_Name(), name);
+		manipulation.set(event, ePackage.getPeriodicEvent_Role(), role);
+		manipulation.set(event, ePackage.getPeriodicEvent_Demarcation(), demarcation);
+		manipulation.set(event, ePackage.getPeriodicEvent_Enable(), enable);
+		manipulation.set(event, ePackage.getPeriodicEvent_Priority(), priority);
+		return event;
+	}
+
+	public void removePeriodicEvent(PeriodicEvent event) throws ModelManipulationException {
+		manipulation.remove(event);
+	}
+
 	// -----------------------------------------------
 
 

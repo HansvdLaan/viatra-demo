@@ -25,6 +25,9 @@ import org.eclipse.viatra.transformation.runtime.emf.modelmanipulation.ModelMani
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Set;
 
 public class PolicyValidatorMain {
@@ -44,15 +47,24 @@ public class PolicyValidatorMain {
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("trbac", new XMIResourceFactoryImpl());
 		Resource.Factory.Registry.INSTANCE.getContentTypeToFactoryMap().put("*", new XMIResourceFactoryImpl());
 
+		LocalDateTime now = LocalDateTime.now();
+
 		ResourceSet set = new ResourceSetImpl();
 		//URI uri = URI.createFileURI("models/basic/intervals.trbac");
-		URI uri = URI.createFileURI("com.vanderhighway.trbac.verifier/models/basic/intervals2.trbac");
+		URI uri = URI.createFileURI("empty_policy_trebla.trbac");
 		Resource resource = set.getResource(uri, true);
+
+		LocalDateTime now2 =  LocalDateTime.now();
+		System.out.println(now.until(now2, ChronoUnit.SECONDS));
 
 		final AdvancedViatraQueryEngine engine = AdvancedViatraQueryEngine.createUnmanagedEngine(new EMFScope(set));
 
+		LocalDateTime now3 =  LocalDateTime.now();
+		System.out.println(now2.until(now3, ChronoUnit.SECONDS));
+
 		PolicyModifier modifier = new PolicyModifier(engine, (Policy) resource.getContents().get(0), resource);
 		PolicyValidator validator = new PolicyValidator(engine);
+		validator.addChangeListeners(engine);
 
 		modifier.addRole("RoleTest");
 
@@ -61,19 +73,18 @@ public class PolicyValidatorMain {
 		automaticModifier.initialize();
 		automaticModifier.execute();
 
+		LocalDateTime now4 =  LocalDateTime.now();
+		System.out.println(now3.until(now4, ChronoUnit.SECONDS));
+
 		//modifier.execute(modifier.removeRange());
-		modifier.addRole("final!");
+		//modifier.addRole("final!");
 
 		//modifier.execute(modifier.removeRange("TestWeekdayRange", "Monday", new IntegerInterval(2,3)));
 		//modifier.execute(modifier.removeRange("TestWeekdayRange", "Monday", new IntegerInterval(0,2)));
 		//modifier.execute(modifier.removeRange("TestWeekdayRange", "Monday", new IntegerInterval(3,4)));
 
-		modifier.addRole("final2!");
+		//modifier.addRole("final2!");
 
-		URI uri2 = URI.createFileURI("com.vanderhighway.trbac.verifier/models/basic/test-save.trbac");
-		Resource resource2 = set.getResource(uri2, true);
-
-		resource.getContents().equals(resource2.getContents());
 		//validator.initialize();
 		//validator.execute();
 		//validator.dispose();

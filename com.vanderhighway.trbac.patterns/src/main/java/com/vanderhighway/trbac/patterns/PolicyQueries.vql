@@ -1,11 +1,12 @@
 /*******************************************************************************
  * Policy Queries
  *******************************************************************************/
+
 package com.vanderhighway.trbac.patterns
 
 import "https://vanderhighway.com/trbac/2020"
 import "http://www.eclipse.org/emf/2002/Ecore"
-import java ^java.util.Set
+//import java ^java.util.Set
 //import java ^java.util.HashSet
 import java ^com.vanderhighway.trbac.aggregators.distinct
 import java ^com.vanderhighway.trbac.aggregators.TimeRangeGroupSet
@@ -58,7 +59,7 @@ pattern allSubDemarcationsIncludingSelf(supdemarcation: Demarcation, demarcation
 
 // ----- Access Relation -----
 
-pattern accessRelation(user: User, permission: Permission) {
+pattern accessRelationSimple(user: User, permission: Permission) {
     User.UR(user,role);
     Role.RD(role, demarcation);
    	Demarcation.DP(demarcation, permission);
@@ -72,6 +73,13 @@ pattern accessRelationWithHierarchies(user: User, permission: Permission) {
    	Demarcation.DP(demarcationP, permission);
 }
 
+pattern accessRelation(user: User, groups: java TimeRangeGroupSet, permission: Permission) {
+    User.UR(user,role);
+    find TimeRangeGroupCollectionEnabled(groups, role, demarcation);
+    find allSubDemarcationsIncludingSelf(demarcation, demarcationP);
+   	Demarcation.DP(demarcationP, permission);
+}
+
 // ---------------------------
 
 // ----- Example Cardinality Constraints -----
@@ -79,6 +87,7 @@ pattern accessRelationWithHierarchies(user: User, permission: Permission) {
 pattern userShouldHaveARole(user: User) {
     neg User.UR(user, _);
 }
+
 pattern roleShouldHaveADemarcation(role: Role) {
     neg Role.RD(role, _);
 }
@@ -130,18 +139,17 @@ pattern SoDEmployeeAndVisitor(userE: User, userV: User, employee : Role, visitor
 
 // ----- Example Prerequiste Constraints -----
 
-pattern PrerequisiteEverybodyHasAccessToLobby(user: User) {
-	Permission.name(pLobby,"Lobby");
-    neg find accessRelation(user, pLobby);
-}
-
-pattern PrerequisiteVaultImpliesOpenOffice(user: User) {
-	Permission.name(pVault,"Vault");
-	find accessRelation(user, pVault);
-	Permission.name(pOpenOffice,"OpenOffice");
-    neg find accessRelation(user, pOpenOffice);
-}
-
+//pattern PrerequisiteEverybodyHasAccessToLobby(user: User) {
+//	Permission.name(pLobby,"Lobby");
+//    neg find accessRelation(user, pLobby);
+//}
+//
+//pattern PrerequisiteVaultImpliesOpenOffice(user: User) {
+//	Permission.name(pVault,"Vault");
+//	find accessRelation(user, pVault);
+//	Permission.name(pOpenOffice,"OpenOffice");
+//    neg find accessRelation(user, pOpenOffice);
+//}
 // ------------------------------------------
 
 
@@ -166,6 +174,8 @@ pattern RangeP(daySchedule: DaySchedule, group: TimeRangeGroup, timeRange: TimeR
 	TimeRange.end(timeRange,endtime);
 }
 
+
+
 pattern DayOfWeekAndMonthSchedule(out weekSchedule: DayOfWeekSchedule, out monthSchedule: DayOfMonthSchedule) {
 	DayOfWeekSchedule(weekSchedule);
 	DayOfMonthSchedule(monthSchedule);
@@ -187,6 +197,7 @@ pattern DayOfWeekAndMonthScheduleTimeRange( weekSchedule: DayOfWeekSchedule, mon
 	starttime == eval(Math.max(wstr_start, mstr_start));
 	endtime == eval(Math.min(wstr_end, mstr_end));
 }
+
 
 pattern DateScheduleTimeRange(in yearDaySchedule: DayOfYearSchedule, in wstr: DayScheduleTimeRange, in mstr: DayScheduleTimeRange,
 	in ystr: DayScheduleTimeRange, out starttime: java Integer, out endtime: java Integer) {
@@ -225,6 +236,8 @@ pattern DateScheduleTimeRange_TimeRangeGroup(in yearDaySchedule: DayOfYearSchedu
 	out endtime: java Integer, group: TimeRangeGroup) {
 		find TimeRangeGroup_DateScheduleTimeRange(group,yearDaySchedule,starttime,endtime);
 	}
+	
+	
 
 pattern DateScheduleTimeRange_To_TimeRangeGroupCombination(in yearDaySchedule: DayOfYearSchedule, out starttime: java Integer, 
 	out endtime: java Integer, groups: java TimeRangeGroupSet) {
@@ -244,9 +257,9 @@ pattern TimeRangeGroupCollectionHasGroup(groups: java TimeRangeGroupSet, group: 
 
 pattern TimeRangeGroupCollectionEnabled(groups: java TimeRangeGroupSet, role: Role, demarcation: Demarcation) {
 	find DateScheduleTimeRange_To_TimeRangeGroupCombination(_, _, _, groups);
-	Role.RD(role,demarcation);
-	maxEnabledPriority == max find EnabledPriority(groups, role, demarcation, #p);
-	maxDisabledPriority == max find DisabledPriority(groups, role, demarcation, #p2);
+	Role(role);
+	maxEnabledPriority == max find EnabledPriority(groups, role2, demarcation, #p);
+	maxDisabledPriority == max find DisabledPriority(groups, role3, demarcation, #p2);
 	check(maxEnabledPriority >= maxDisabledPriority);
 } or {
 	find DateScheduleTimeRange_To_TimeRangeGroupCombination(_, _, _, groups);
@@ -263,16 +276,32 @@ pattern EnabledPriority(groups: java TimeRangeGroupSet, role: Role, demarcation:
 	Role.constraintedBy(role, rule);
 	Demarcation.constrainedBy(demarcation, rule);
 	PeriodicEvent.priority(rule, priority);
+} or {
+	find TimeRangeGroupCollectionHasGroup(groups,group);
+	TimeRangeGroup.periodicEvents(group, rule);
+	PeriodicEvent.enable(rule, enabled);
+	check(enabled);
+	find allJuniors(role, roleJunior);
+	Role.constraintedBy(roleJunior, rule);
+	Demarcation.constrainedBy(demarcation, rule);
+	PeriodicEvent.priority(rule, priority);
 }
-
 
 pattern DisabledPriority(groups: java TimeRangeGroupSet, role: Role, demarcation: Demarcation, priority: java Integer) {
 	find TimeRangeGroupCollectionHasGroup(groups,group);
 	TimeRangeGroup.periodicEvents(group, rule);
-	PeriodicEvent.enable(rule, false);
 	PeriodicEvent.enable(rule, enabled);
 	check(!enabled);
 	Role.constraintedBy(role, rule);
+	Demarcation.constrainedBy(demarcation, rule);
+	PeriodicEvent.priority(rule, priority);
+} or {
+	find TimeRangeGroupCollectionHasGroup(groups,group);
+	TimeRangeGroup.periodicEvents(group, rule);
+	PeriodicEvent.enable(rule, enabled);
+	check(!enabled);
+	find allJuniors(role, roleJunior);
+	Role.constraintedBy(roleJunior, rule);
 	Demarcation.constrainedBy(demarcation, rule);
 	PeriodicEvent.priority(rule, priority);
 }
@@ -289,7 +318,7 @@ pattern DisabledPriority(groups: java TimeRangeGroupSet, role: Role, demarcation
 //	DayScheduleTimeRange.timeRanges(mstr, tr);
 //	TimeRangeGroup.timeRanges(group, tr);
 //}
-
+//
 //pattern DayScheduleTimeRangeGroup(in weekday: DayOfWeekSchedule, in yearday: DayOfMonthSchedule, 
 //	out starttime: java Integer, out endtime: java Integer, groups: java Set) {
 //	find DayOfWeekAndMonthScheduleTimeRange(weekday, yearday, wsr, ysr, starttime, endtime);

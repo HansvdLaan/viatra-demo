@@ -163,10 +163,15 @@ public class PolicyAutomaticModifier {
         EventDrivenTransformationRule<RangeP.Match, RangeP.Matcher> dayrangerule =
                 this._eventDrivenTransformationRuleFactory.createRule(RangeP.instance()).action(
                         CRUDActivationStateEnum.CREATED, (RangeP.Match it) -> {
-                            System.out.println("DayRangeMatch CREATED:" + it.toString());
+                            //System.out.println("DayRangeMatch CREATED:" + it.toString());
                             try {
                                 IntervalTree tree = trees.get(it.getTimeRange().getDaySchedule().getName());
-                                IntervalUtil.processAddRange(this.policyModifier, tree, it);
+
+                                //Check if the match hasn't been processed before, e.g. in
+                                // the case of the always day schedule time ranges.
+                                if(it.getTimeRange().getDayScheduleTimeRanges().size() == 0) {
+                                    IntervalUtil.processAddRange(this.policyModifier, tree, it);
+                                }
                             } catch (ModelManipulationException e) {
                                 e.printStackTrace();
                             }
@@ -182,7 +187,7 @@ public class PolicyAutomaticModifier {
                                 e.printStackTrace();
                             }
                         }
-                            ).addLifeCycle(Lifecycles.getDefault(true, true))
+                            ).addLifeCycle(Lifecycles.getDefault(false, true))
                         .name("process-day-ranges").build();
         return dayrangerule;
     }

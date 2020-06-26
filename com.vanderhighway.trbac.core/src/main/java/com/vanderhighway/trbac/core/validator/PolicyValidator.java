@@ -2,11 +2,16 @@ package com.vanderhighway.trbac.core.validator;
 
 import com.brein.time.timeintervals.indexes.IntervalTree;
 import com.brein.time.timeintervals.intervals.IntegerInterval;
+import com.vanderhighway.trbac.patterns.AccessRelation;
+import com.vanderhighway.trbac.patterns.DisabledPriority;
+import com.vanderhighway.trbac.patterns.EnabledPriority;
+import com.vanderhighway.trbac.patterns.TimeRangeGroupCollectionEnabled;
 import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.viatra.query.runtime.api.AdvancedViatraQueryEngine;
 import org.eclipse.xtext.xbase.lib.Extension;
 
+import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("all")
@@ -70,6 +75,8 @@ public class PolicyValidator {
 
         //engine.addMatchUpdateListener(EnabledPriority.Matcher.on(engine), com.vanderhighway.trbac.core.validator.ListenerFactory.getEnabledPriorityUpdateListener(), true);
         //engine.addMatchUpdateListener(DisabledPriority.Matcher.on(engine), com.vanderhighway.trbac.core.validator.ListenerFactory.getDisabledPriorityUpdateListener(), true);
+        //engine.addMatchUpdateListener(TimeRangeGroupCollectionEnabled.Matcher.on(engine), ListenerFactory.getTimeRangeGroupCollectionEnabledUpdateListener(), true);
+        engine.addMatchUpdateListener(AccessRelation.Matcher.on(engine), ListenerFactory.getAccessRelationUpdateListener(), true);
         //engine.addMatchUpdateListener(AllJuniors.Matcher.on(engine), com.vanderhighway.trbac.core.validator.ListenerFactory.getAllJuniorsUpdateListener(), true);
 
         //engine.addMatchUpdateListener(TimeRangeGroup.Matcher.on(engine), com.vanderhighway.trbac.core.validator.ListenerFactory.getTimeRangeGroupUpdateListener(), true);

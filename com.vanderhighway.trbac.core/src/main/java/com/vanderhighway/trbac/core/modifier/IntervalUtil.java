@@ -33,15 +33,11 @@ public class IntervalUtil {
             List<IntegerInterval> overlaps = tree.overlap(rangeInterval).stream().map(x -> (IntegerInterval) x).collect(toList());
             DaySchedule daySchedule = timeRange.getDaySchedule();
 
-            if(timeRange.getName().toLowerCase().contains("always")) {
-                return;
-            }
-
             //Two possible cases, either one overlap or two or more overlaps!
             if (overlaps.size() == 1) {
                 IntegerInterval overlap = overlaps.get(0);
                 // interval and overlap are equal
-                if (timeRange.getStart() == overlap.getStart() && timeRange.getStart() == overlap.getEnd()) {
+                if (timeRange.getStart() == overlap.getStart() && timeRange.getEnd() == overlap.getEnd()) {
                     addRangeReference(modifier, daySchedule, overlap, match.getTimeRange());
                 }
                 //no overlapping bounds and interval proper subset of overlap

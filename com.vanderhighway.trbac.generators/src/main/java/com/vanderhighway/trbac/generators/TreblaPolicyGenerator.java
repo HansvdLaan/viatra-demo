@@ -43,7 +43,7 @@ public class TreblaPolicyGenerator {
 
 		ResourceSet set = new ResourceSetImpl();
 
-		String relativePath = "."+fileSeparator+".trbac";
+		String relativePath = "."+fileSeparator+"empty_policy_trebla.trbac";
 		File file = new File(relativePath);
 		if(file.createNewFile()){
 			System.out.println(relativePath+" File Created in Project root directory");
@@ -88,28 +88,32 @@ public class TreblaPolicyGenerator {
 			TimeRange overtimeRange = modifier.addTimeRange(overtime, dayOfWeekSchedule, "Overtime_" + day, new IntegerInterval(1020,1169));
 			TimeRange lunchBreakRange = modifier.addTimeRange(lunchBreaks, dayOfWeekSchedule, "LunchBreak_" + day, new IntegerInterval(720,779));
 
-			DayScheduleTimeRange sr1 = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR1_" + day, new IntegerInterval(0,449));
-			DayScheduleTimeRange sr2 = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR2_" + day, new IntegerInterval(450,479));
-			DayScheduleTimeRange sr3 = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR3_" + day, new IntegerInterval(480,599));
-			DayScheduleTimeRange sr4 = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR4_" + day, new IntegerInterval(600,719));
-			DayScheduleTimeRange sr5 = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR5_" + day, new IntegerInterval(720,779));
-			DayScheduleTimeRange sr6 = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR6_" + day, new IntegerInterval(780,959));
-			DayScheduleTimeRange sr7 = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR7_" + day, new IntegerInterval(960,1019));
-			DayScheduleTimeRange sr8 = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR8_" + day, new IntegerInterval(1020,1169));
-			DayScheduleTimeRange sr9 = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR9_" + day, new IntegerInterval(1070,1439));
+			DayScheduleTimeRange srAlways = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR_ALWAYS" + day, new IntegerInterval(0, 1439));
+//			DayScheduleTimeRange sr1 = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR1_" + day, new IntegerInterval(0,449));
+//			DayScheduleTimeRange sr2 = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR2_" + day, new IntegerInterval(450,479));
+//			DayScheduleTimeRange sr3 = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR3_" + day, new IntegerInterval(480,599));
+//			DayScheduleTimeRange sr4 = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR4_" + day, new IntegerInterval(600,719));
+//			DayScheduleTimeRange sr5 = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR5_" + day, new IntegerInterval(720,779));
+//			DayScheduleTimeRange sr6 = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR6_" + day, new IntegerInterval(780,959));
+//			DayScheduleTimeRange sr7 = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR7_" + day, new IntegerInterval(960,1019));
+//			DayScheduleTimeRange sr8 = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR8_" + day, new IntegerInterval(1020,1169));
+//			DayScheduleTimeRange sr9 = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR9_" + day, new IntegerInterval(1070,1439));
+//
 
-			modifier.getManipulation().addAllTo(alwaysRange, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr1,sr2,sr3,sr4,
-					sr5,sr6,sr7,sr8,sr9));
-			modifier.getManipulation().addAllTo(guardShift1Range, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr1));
-			modifier.getManipulation().addAllTo(guardShift2Range, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr9));
-			modifier.getManipulation().addAllTo(workingHoursRange, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr3,sr4,sr5,sr6,sr7));
-			modifier.getManipulation().addAllTo(visitingHoursRange, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr4,sr5,sr6));
-			modifier.getManipulation().addAllTo(overtimeRange, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr8));
-			modifier.getManipulation().addAllTo(lunchBreakRange, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr5));
+			modifier.getManipulation().addAllTo(alwaysRange, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(srAlways));
+
+//			modifier.getManipulation().addAllTo(alwaysRange, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr1,sr2,sr3,sr4,
+//					sr5,sr6,sr7,sr8,sr9));
+//			modifier.getManipulation().addAllTo(guardShift1Range, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr1));
+//			modifier.getManipulation().addAllTo(guardShift2Range, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr9));
+//			modifier.getManipulation().addAllTo(workingHoursRange, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr3,sr4,sr5,sr6,sr7));
+//			modifier.getManipulation().addAllTo(visitingHoursRange, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr4,sr5,sr6));
+//			modifier.getManipulation().addAllTo(overtimeRange, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr8));
+//			modifier.getManipulation().addAllTo(lunchBreakRange, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr5));
 
 			if(day.equals("Tuesday") || day.equals("Friday")) {
 				TimeRange cleaningShiftRange = modifier.addTimeRange(cleaningShifts, dayOfWeekSchedule, "CleaningShift_" + day, new IntegerInterval(1020,1169));
-				modifier.getManipulation().addAllTo(cleaningShiftRange, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr9));
+				//modifier.getManipulation().addAllTo(cleaningShiftRange, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr9));
 			}
 
 			dayOfWeekScheduleMap.put(day, dayOfWeekSchedule);
@@ -121,13 +125,17 @@ public class TreblaPolicyGenerator {
 			TimeRange guardShift1Range = modifier.addTimeRange(guardShifts, dayOfWeekSchedule, "GuardShift1_" + day, new IntegerInterval(0,449));
 			TimeRange guardShift2Range = modifier.addTimeRange(guardShifts, dayOfWeekSchedule, "GuardShift2_" + day, new IntegerInterval(1170,1439));
 
-			DayScheduleTimeRange sr1 = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR1_" + day, new IntegerInterval(0,449));
-			DayScheduleTimeRange sr2 = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR2_" + day, new IntegerInterval(450,1169));
-			DayScheduleTimeRange sr3 = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR7_" + day, new IntegerInterval(1070,1439));
+			DayScheduleTimeRange srAlways = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR_ALWAYS" + day, new IntegerInterval(0, 1439));
 
-			modifier.getManipulation().addAllTo(alwaysRange, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr1,sr2,sr3));
-			modifier.getManipulation().addAllTo(guardShift1Range, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr1));
-			modifier.getManipulation().addAllTo(guardShift2Range, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr3));
+			//DayScheduleTimeRange sr1 = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR1_" + day, new IntegerInterval(0,449));
+			//DayScheduleTimeRange sr2 = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR2_" + day, new IntegerInterval(450,1169));
+			//DayScheduleTimeRange sr3 = modifier.addDayScheduleTimeRange(dayOfWeekSchedule, "SR7_" + day, new IntegerInterval(1070,1439));
+
+			modifier.getManipulation().addAllTo(alwaysRange, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(srAlways));
+
+			//modifier.getManipulation().addAllTo(alwaysRange, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr1,sr2,sr3));
+			//modifier.getManipulation().addAllTo(guardShift1Range, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr1));
+			//modifier.getManipulation().addAllTo(guardShift2Range, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr3));
 
 			dayOfWeekScheduleMap.put(day, dayOfWeekSchedule);
 		}
@@ -149,22 +157,22 @@ public class TreblaPolicyGenerator {
 				TimeRange alwaysRange = modifier.addTimeRange(always, dayOfMonthSchedule, "Always_" + monthDay,
 						new IntegerInterval(0, 1439));
 
-				if((monthIndex == 11 && dayIndex == 4) || (monthIndex == 11 && dayIndex == 30)) { // 5 december or 31 december
-					TimeRange workshopRange = modifier.addTimeRange(workshops, dayOfMonthSchedule, "Workshop" + monthDay, new IntegerInterval(480,1019));
-					DayScheduleTimeRange sr1 = modifier.addDayScheduleTimeRange(dayOfMonthSchedule, "" +
-							"SR1_" + monthDay, new IntegerInterval(0, 479));
-					DayScheduleTimeRange sr2 = modifier.addDayScheduleTimeRange(dayOfMonthSchedule, "" +
-							"SR2_" + monthDay, new IntegerInterval(480,1019));
-					DayScheduleTimeRange sr3 = modifier.addDayScheduleTimeRange(dayOfMonthSchedule, "" +
-							"SR3_" + monthDay, new IntegerInterval(1020, 1439));
-					modifier.getManipulation().addAllTo(alwaysRange, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr1,sr2,sr3));
-					modifier.getManipulation().addAllTo(workshopRange, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr2));
-				}
-				else {
+//				if((monthIndex == 11 && dayIndex == 4) || (monthIndex == 11 && dayIndex == 30)) { // 5 december or 31 december
+//					TimeRange workshopRange = modifier.addTimeRange(workshops, dayOfMonthSchedule, "Workshop" + monthDay, new IntegerInterval(480,1019));
+//					DayScheduleTimeRange sr1 = modifier.addDayScheduleTimeRange(dayOfMonthSchedule, "" +
+//							"SR1_" + monthDay, new IntegerInterval(0, 479));
+//					DayScheduleTimeRange sr2 = modifier.addDayScheduleTimeRange(dayOfMonthSchedule, "" +
+//							"SR2_" + monthDay, new IntegerInterval(480,1019));
+//					DayScheduleTimeRange sr3 = modifier.addDayScheduleTimeRange(dayOfMonthSchedule, "" +
+//							"SR3_" + monthDay, new IntegerInterval(1020, 1439));
+//					modifier.getManipulation().addAllTo(alwaysRange, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr1,sr2,sr3));
+//					modifier.getManipulation().addAllTo(workshopRange, ePackage.getTimeRange_DayScheduleTimeRanges(), Arrays.asList(sr2));
+//				}
+//				else {
 					DayScheduleTimeRange alwaysScheduleRange = modifier.addDayScheduleTimeRange(dayOfMonthSchedule, "" +
 							"Always_" + monthDay + "_DSTR", new IntegerInterval(0, 1439));
 					modifier.getManipulation().addTo(alwaysRange, ePackage.getTimeRange_DayScheduleTimeRanges(), alwaysScheduleRange);
-				}
+//				}
 
 				dayOfMonthScheduleMap.get(months.get(monthIndex)).put(dayIndex, dayOfMonthSchedule);
 			}
@@ -276,6 +284,19 @@ public class TreblaPolicyGenerator {
 		modifier.assignRoleToUser(userJulia, roleVisitor);
 
 		// Add Role-Demarcation relation
+		modifier.assignDemarcationToRole(roleEmployee, demarcationWorking);
+		modifier.assignDemarcationToRole(roleDesigner, demarcationDesigning);
+		modifier.assignDemarcationToRole(roleHeadDesigner, demarcationManagingPeople);
+		modifier.assignDemarcationToRole(roleHeadDesigner, demarcationManagingStock);
+		modifier.assignDemarcationToRole(roleOperationsManager, demarcationManagingPeople);
+		modifier.assignDemarcationToRole(roleOperationsManager, demarcationManagingStock);
+		modifier.assignDemarcationToRole(roleDirector, demarcationManaging);
+		modifier.assignDemarcationToRole(roleGuard, demarcationGuarding);
+		modifier.assignDemarcationToRole(roleCleaner, demarcationCleaning);
+		modifier.assignDemarcationToRole(roleVisitor, demarcationVisiting);
+		modifier.assignDemarcationToRole(roleVisitor, demarcationTakingABreak);
+
+		// Add Demarcation-Permission relation
 		Arrays.asList(permissionLobby, permissionOpenOffice, permissionRestaurant, permissionMeetingRoom1, permissionMeetingRoom2,
 				permissionToilets).forEach(p -> {
 					try {
@@ -313,6 +334,19 @@ public class TreblaPolicyGenerator {
 		modifier.assignPermissionToDemarcation(demarcationVisiting, permissionWorkshop);
 
 		modifier.assignPermissionToDemarcation(demarcationTakingABreak, permissionRestaurant);
+
+
+		modifier.addPeriodicEvent(workingHours, "PE1", roleEmployee, demarcationWorking, true, 3);;
+		modifier.addPeriodicEvent(workingHours, "PE2", roleDesigner, demarcationDesigning, true, 3);
+		modifier.addPeriodicEvent(workingHours, "PE3", roleHeadDesigner, demarcationManagingPeople, true, 3);
+		modifier.addPeriodicEvent(workingHours, "PE4", roleHeadDesigner, demarcationManagingStock, true, 3);
+		modifier.addPeriodicEvent(workingHours, "PE5", roleOperationsManager, demarcationManagingPeople, true, 3);
+		modifier.addPeriodicEvent(workingHours, "PE6", roleOperationsManager, demarcationManagingStock, true, 3);
+		modifier.addPeriodicEvent(workingHours, "PE7", roleDirector, demarcationManaging, true, 3);
+		modifier.addPeriodicEvent(guardShifts, "PE8", roleGuard, demarcationGuarding, true, 3);
+		modifier.addPeriodicEvent(cleaningShifts, "PE9", roleCleaner, demarcationCleaning, true, 3);
+		modifier.addPeriodicEvent(visitingHours, "PE10", roleVisitor, demarcationVisiting, true, 3);
+		modifier.addPeriodicEvent(lunchBreaks, "PE11", roleVisitor, demarcationTakingABreak, true, 3);
 
 		resource.save(Collections.emptyMap());
 

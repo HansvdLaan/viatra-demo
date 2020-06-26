@@ -33,7 +33,7 @@ public class EmptyPolicyGenerator {
 		String fileSeparator = System.getProperty("file.separator");
 
 		System.out.println("Empty Policy Generator Called!");
-		System.out.print("Initialize model scope and preparing engine... ");
+		System.out.println("Initialize model scope and preparing engine... ");
 
 		// Initializing the EMF package
 		TRBACPackage.eINSTANCE.getName();
@@ -42,7 +42,7 @@ public class EmptyPolicyGenerator {
 
 		ResourceSet set = new ResourceSetImpl();
 
-		String relativePath = "."+fileSeparator+".trbac";
+		String relativePath = "."+fileSeparator+"empty_policy_all_schedules.trbac";
 		File file = new File(relativePath);
 		if(file.createNewFile()){
 			System.out.println(relativePath+" File Created in Project root directory");
