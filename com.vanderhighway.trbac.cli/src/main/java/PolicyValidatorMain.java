@@ -8,7 +8,6 @@
  *******************************************************************************/
 
 import com.google.common.reflect.TypeToken;
-import com.vanderhighway.trbac.core.modifier.PolicyAutomaticModifier;
 import com.vanderhighway.trbac.core.modifier.PolicyModifier;
 import com.vanderhighway.trbac.core.validator.PolicyValidator;
 import com.vanderhighway.trbac.model.trbac.model.Policy;
@@ -51,7 +50,7 @@ public class PolicyValidatorMain {
 
 		ResourceSet set = new ResourceSetImpl();
 		//URI uri = URI.createFileURI("models/basic/intervals.trbac");
-		URI uri = URI.createFileURI("empty_policy_trebla.trbac");
+		URI uri = URI.createFileURI("./My.trbac");
 		Resource resource = set.getResource(uri, true);
 
 		LocalDateTime now2 =  LocalDateTime.now();
@@ -62,40 +61,14 @@ public class PolicyValidatorMain {
 		LocalDateTime now3 =  LocalDateTime.now();
 		System.out.println(now2.until(now3, ChronoUnit.SECONDS));
 
+
 		PolicyModifier modifier = new PolicyModifier(engine, (Policy) resource.getContents().get(0), resource);
 		PolicyValidator validator = new PolicyValidator(engine);
+
 		validator.addChangeListeners(engine);
-
-		modifier.addRole("RoleTest");
-
-		PolicyAutomaticModifier automaticModifier = new PolicyAutomaticModifier(engine, modifier, (Policy) resource.getContents().get(0));
-
-		automaticModifier.initialize();
-		automaticModifier.execute();
 
 		LocalDateTime now4 =  LocalDateTime.now();
 		System.out.println(now3.until(now4, ChronoUnit.SECONDS));
-
-		//modifier.execute(modifier.removeRange());
-		//modifier.addRole("final!");
-
-		//modifier.execute(modifier.removeRange("TestWeekdayRange", "Monday", new IntegerInterval(2,3)));
-		//modifier.execute(modifier.removeRange("TestWeekdayRange", "Monday", new IntegerInterval(0,2)));
-		//modifier.execute(modifier.removeRange("TestWeekdayRange", "Monday", new IntegerInterval(3,4)));
-
-		//modifier.addRole("final2!");
-
-		//validator.initialize();
-		//validator.execute();
-		//validator.dispose();
-
-//		modifier.execute(modifier.addRole("R4"));
-//		modifier.execute(modifier.addRoleInheritance("R3", "R4"));
-//		modifier.execute(modifier.assignRoleToUser("U4", "R4"));
-//
-
-//		modifier.execute(modifier.assignRoleToUser("UserTest", "R1"));
-//		modifier.execute(modifier.assignRoleToUser("UserTest", "R2"));
 
 		modifier.dispose();
 
